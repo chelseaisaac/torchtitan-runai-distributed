@@ -59,7 +59,9 @@ runai submit --name torchtitan \
 -g 8 
 ```
 
-
+## To-do list
+- Test with Llama3-70b model with FDSP and TP (Tensor Parallel)
+- Test with Llama3-405b model 
 
 ### Modications from the the repository (& why):
 
