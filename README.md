@@ -61,7 +61,7 @@ runai submit --name torchtitan \
 
 
 
-## Modications from the the repository (& why):
+### Modications from the the repository (& why):
 
 The training scripts presented are slightly modified versions of the example scripts that 'torchtitan' provides in their repository.
 * [torchtitan/utils.py](torchtitan/utils.py) - Updated seed in to be within 32-bit range. The original seed was too large and triggered a runtime error in our environment (DGX Cloud on AWS).
