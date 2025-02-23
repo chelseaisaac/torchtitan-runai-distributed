@@ -37,7 +37,7 @@ CONFIG_FILE="./torchtitan/models/llama/train_configs/llama3_8b.toml"
 ```
 
 
-## Data Parallelism with PyTorch using torchtitan
+## Data Parallelism (FDSP) with PyTorch using torchtitan
 If you want to create your own image, you can edit your code, create your image and push the image to your image registry with the following commands:
 
 ```
