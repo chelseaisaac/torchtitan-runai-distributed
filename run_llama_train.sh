@@ -7,7 +7,8 @@
 
 set -ex
 
-python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --hf_token=<ADD-HF-ACCESS-TOKEN-HERE>
+# Be sure to export your huggingface token via terminal e.g. export HF_TOKEN=<your HF Token> 
+python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --hf_token=$HF_TOKEN
 export NCCL_DEBUG=INFO
 export NCCL_IGNORE_CPU_AFFINITY=1
 
