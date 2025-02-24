@@ -51,6 +51,14 @@ Llama 3 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node)
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -i nvcr.io/<ORG ID>/torchtitan-dist
 ```
+If you'd like to run the same job with a PVC attached, here's the command:
+
+```bash
+runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
+        -i nvcr.io/<ORG ID>/torchtitan-dist
+        --existing-pvc "claimname=<CLAIM_NAME>,path=<PATH>" 
+```
+
 If you wanted to do a single-node training run with 8 GPUs:
 ```bash
 runai submit --name torchtitan \
