@@ -45,18 +45,20 @@ docker push nvcr.io/<ORG ID>/torchtitan-dist
 ```
 
 ### Start a multi-node training run
-Llama 3 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node)
+Llama 3 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node). Select model configuration by updating the TOML file in CONFIG_FILE below. 
 
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
-        -i nvcr.io/<ORG ID>/torchtitan-dist
+        -i nvcr.io/<ORG ID>/torchtitan-dist \
+        -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"}
 ```
 If you'd like to run the same job with a PVC attached, here's the command:
 
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -i nvcr.io/<ORG ID>/torchtitan-dist
-        --existing-pvc "claimname=<CLAIM_NAME>,path=<PATH>" 
+        --existing-pvc "claimname=<CLAIM_NAME>,path=<PATH>"  \
+        -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"}
 ```
 
 If you wanted to do a single-node training run with 8 GPUs:
