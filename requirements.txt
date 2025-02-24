@@ -283,6 +283,7 @@ torch @ file:///opt/transfer/torch-2.6.0a0%2Becf3bae40a.nv25.1-cp312-cp312-linux
 torch_tensorrt @ file:///opt/pytorch/torch_tensorrt/dist/torch_tensorrt-2.6.0a0-cp312-cp312-linux_x86_64.whl#sha256=f4458cd5d2743e7862e3962685c0288550162dd06de2a633554c7640485ffc5a
 torchdata==0.11.0
 torchprofile==0.0.4
+torchao==0.8.0
 torchtitan @ file:///workspace/torchtitan
 torchvision @ file:///opt/transfer/torchvision-0.20.0a0-cp312-cp312-manylinux_2_28_x86_64.whl#sha256=8e2173df9035a25ca3097cbf8f28f5218df6504d0d646edbadba168a06a0501b
 tornado==6.4.2
