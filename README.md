@@ -56,7 +56,7 @@ If you'd like to run the same job with a PVC attached, here's the command:
 
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
-        -i nvcr.io/<ORG ID>/torchtitan-dist
+        -i nvcr.io/<ORG ID>/torchtitan-dist \
         --existing-pvc "claimname=<CLAIM_NAME>,path=<PATH>"  \
         -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"}
 ```
