@@ -8,7 +8,8 @@ In this repo, we will show how to leverage data parallelism using torchtitan and
 
 <b>Background:</b>
 - With Distributed Data parallelism (DDP), each GPU gets a copy of the entire model and different batches of data.
-- Fully sharded data parallelism (FSDP) shards both model parameters and optimizer states across GPUs/ nodes, reducing memory usage. Each GPU stores a portion of model parameters and optimizer states to save memory. 
+- Fully sharded data parallelism (FSDP) shards both model parameters and optimizer states across GPUs/ nodes, reducing memory usage. Each GPU stores a portion of model parameters and optimizer states to save memory.
+- With Tensor Parallelism (TP), individual layers of the model are split across multiple GPUs. 
 
 If you would like to learn more about distributed training with Run:ai, please refer to [this Github repo](https://github.com/EkinKarabulut/distributed_training_with_runai). 
 
