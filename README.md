@@ -25,10 +25,19 @@ If you would like to learn more about distributed training with Run:ai, please r
 
 ### Pre-work
 
-Add HuggingFace access token to [run_llama_train.sh](run_llama_train.sh).
+Export your HuggingFace access token in your terminal.
+
 ```
-# Llama 3.1 tokenizer.model
-python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --hf_token=<ADD-HF-TOKEN-HERE>
+$ export HF_TOKEN="YOUR_HF_TOKEN"
+$ echo $HF_TOKEN
+YOUR_HF_TOKEN
+```
+
+Your HF token will be referenced in the [run_llama_train.sh](run_llama_train.sh) script.
+
+```
+# Be sure to export your huggingface token via terminal e.g. export HF_TOKEN=<your HF Token> 
+python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --hf_token=$HF_TOKEN
 ```
 
 
