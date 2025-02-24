@@ -4,7 +4,8 @@ RUN git clone https://github.com/pytorch/torchtitan.git && \
     cd torchtitan && \
     pip install -r requirements.txt && \
     pip install . && \
-    pip install --upgrade torch
+    pip install --upgrade torch && \
+    pip install torchao==0.8.0
 
 #Set the working directory
 WORKDIR /app
