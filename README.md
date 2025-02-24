@@ -31,11 +31,6 @@ Add HuggingFace access token to [run_llama_train.sh](run_llama_train.sh).
 python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --hf_token=<ADD-HF-TOKEN-HERE>
 ```
 
-Select model configuration in [run_llama_train.sh](run_llama_train.sh).
-```
-CONFIG_FILE="./torchtitan/models/llama/train_configs/llama3_8b.toml"
-```
-
 
 ## Data Parallelism (FDSP) with PyTorch using torchtitan
 If you want to create your own image, you can edit your code, create your image and push the image to your image registry with the following commands:
