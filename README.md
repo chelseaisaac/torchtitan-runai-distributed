@@ -24,7 +24,7 @@ If you would like to learn more about distributed training with Run:ai, please r
 
 
 ### Pre-Requisites
-Note: This repo assumes you have access to a DGXC Sprint/Run:ai cluster and have kubectl, kubeconfig, and the Run:ai CLI installed.
+Note: This repo assumes you have access to a DGXC Sprint/Run:ai cluster and have [kubectl, kubeconfig, and the Run:ai CLI installed](https://docs.nvidia.com/dgx-cloud/run-ai/latest/advanced.html#accessing-the-run-ai-cli).
 
 Export your HuggingFace access token in your terminal:
 
