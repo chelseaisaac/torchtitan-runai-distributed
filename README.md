@@ -115,7 +115,7 @@ Add your [NGC Account & Personal API Key](https://docs.nvidia.com/dgx-cloud/run-
 9. Click CREATE CREDENTIALS. Your credentials will now be saved in the cluster and shall be used when you pull a container from your private registry.
 
 ### Start a Multi-Node Training Run
-Below is an example to submit a Llama 3 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node) with the Run:ai CLI. In this example, we also pass two environment variables denoted with a '-e' flag that allows you to adjust your configuration file (.toml) to leverage [Llama 8B, 70B, or 405B](https://github.com/chelseaisaac/torchtitan-runai-distributed/tree/main/train_configs) and pass your HuggingFace Token. 
+Below is an example to train the Llama 3.1 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node) with the Run:ai CLI. In this example, we also pass two environment variables denoted with a '-e' flag that allows you to adjust your configuration file (.toml) to leverage [Llama 8B, 70B, or 405B](https://github.com/chelseaisaac/torchtitan-runai-distributed/tree/main/train_configs) and pass your HuggingFace Token. 
 
 Note: When training the Llama 70B or 405B models using tensor parallelism, it's essential that the model's dimension (8192) is divisible by the number of nodes/shards. For the Llama 70B model, a minimum of 32 GPUs is required. During our tests with the Llama 405B model using 8 nodes (64 GPUs), we encountered an out of memory error.
 
@@ -210,7 +210,7 @@ Copyright (c) 2014-2024 Facebook Inc.
 - Test with Llama 3 70B — Completed
 - Test with Llama 3 405b — Not Started (Need **at least 16 nodes** or more)
 
-### Modications from the the repository (& why):
+### Modications from the torchtitan repository (& why):
 
 The training scripts presented are slightly modified versions of the example scripts that 'torchtitan' provides in their repository.
 * [run_llama_train.sh](run_llama_train.sh) - Add environment variables to support distributed PyTorch training with Run:ai.
