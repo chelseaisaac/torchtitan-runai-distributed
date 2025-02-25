@@ -131,13 +131,15 @@ runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
 ```bash
 runai submit --name torchtitan \
 -i nvcr.io/<ORG NAME>/torchtitan \
--g 8 
+-g 8 \
+-e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"} \
+-e HF_TOKEN=$HF_TOKEN
 ```
 
 **Llama 405B Example** _(Note: We've added additional environment variables to improve redundancies in the event you encounter pods restarts or throttling)_
 ```bash
-runai submit-dist pytorch --name smcdo-torchtitan --workers=15 -g 8 \
-        -i nvcr.io/nvidian/smcd-torchtitan:20250221_1 \
+runai submit-dist pytorch --name distributed-training-pytorch --workers=15 -g 8 \
+        -i nvcr.io/<ORG NAME>/torchtitan-dist \
         -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_405b.toml"} \
         -e HF_TOKEN=$HF_TOKEN \
         -e RDZV_TIMEOUT=3600 \
@@ -165,7 +167,7 @@ what-is-pv-project-57wbe       Bound     pvc-2a15ca56-bdb6-4f0a-ab37-96e4be90dec
 ```
 
 ### Create a PVC in Run:ai
-A Persistent Volume Claim (PVC) is a request for dedicated storage that allows your data to persist beyond the lifecycle of a pod. It ensures that the data remains accessible to containers even after the pod is terminated. To learn more about PVC's and how to set them up, read the [DGXC Sprint Guide](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#pvc). 
+A Persistent Volume Claim (PVC) is a request for dedicated storage that allows your data to persist beyond the lifecycle of a pod. It ensures that the data remains accessible to containers even after the pod is terminated. To learn more about PVC's and how to set them up, read the [Run:ai on DGX Cloud Guide](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#pvc). 
 
 <img width="373" alt="Screenshot 2025-02-25 at 10 08 01 AM" src="https://github.com/user-attachments/assets/2111fb2a-3565-4276-8702-9c18abdc635f" />
 
