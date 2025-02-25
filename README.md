@@ -23,10 +23,86 @@ If you would like to learn more about distributed training with Run:ai, please r
 4. Create a Hugging Face account and agree to Meta Llama 3.1 Community License agreement while signed into Hugging Face account. Generate a Hugging Face read access token in [account settings](https://huggingface.co/settings/tokens). It’s required to access the Llama3.1-8B model. (`torchtitan` currently supports training Llama 3.1 (8B, 70B, 405B) out of the box.)
 
 
-### Pre-Requisites
+## Pre-Requisites
 Note: This repo assumes you have access to a DGXC Sprint/Run:ai cluster and have [kubectl, kubeconfig, and the Run:ai CLI installed](https://docs.nvidia.com/dgx-cloud/run-ai/latest/advanced.html#accessing-the-run-ai-cli).
 
-Export your HuggingFace access token in your terminal:
+### Install kubectl:
+```bash
+# Install on macOS
+brew install kubectl
+
+# View version
+kubectl version --client
+
+# OPTIONAL SECTION 
+# Set kubectl as an alias fo to your shell configuration file (e.g. ~/.bashrc, ~/.bash_profile, ~/.zshrc, etc.)
+nano ~/.zshrc
+
+# Append the following on a new line in the file
+alias k='kubectl'
+
+# Save your kubeconfig
+ctrl + o
+Enter
+
+# Exit the editor
+ctrl + x
+
+# Apply the changes to your shell configuration file
+source ~/.zshrc
+```
+
+### Save your kubeconfig:
+```bash
+# Create a folder named .kube
+mkdir ~/.kube
+
+# Change directory to .kube
+cd ~/.kube
+
+# Create your kubeconfig file
+touch kubeconfig
+
+# Paste the contents of your kubeconfig into the editor
+ctrl + v or cmd + v
+
+# Save your kubeconfig
+ctrl + o
+Enter
+
+# Exit the editor
+ctrl + x
+
+# View your kubeconfig in the .kube folder
+ls
+```
+
+### Download the Run:ai CLI
+1. In your web browser, navigate to your Run:ai URL e.g. https://app.run.ai
+2. Select CONTINUE WITH SSO
+3. In the top right of the Run:ai interface, click the '?' and select Researcher Command Line Interface
+4. Select your operating system
+5. Paste the **wget** command in terminal
+6. After installation, run the following command in terminal:
+```bash
+# Change the permissions to make runai an executable
+chmod +x runai
+
+# Move runai file to your ~/local/bin directory
+sudo mv runai /usr/local/bin/runai
+
+# Authenticate your CLI
+runai login
+Go ot the following link in your browser:
+<Copy and paste this run.ai link>
+
+# Paste the verification code from your browser into your terminal
+Enter verifcation code: #########
+
+INFO[0248] Logged in successfully
+```   
+
+### Export your HuggingFace access token in your terminal:
 
 ```bash
 export HF_TOKEN=<YOUR_HF_TOKEN>
@@ -41,7 +117,7 @@ Your HuggingFace token will be referenced in the [run_llama_train.sh](run_llama_
 python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --local_dir=/torchtitan/datasets/tokenizer/ --hf_token=$HF_TOKEN
 ```
 
-Install software to run containers like [Docker](https://www.docker.com/get-started/) or [Colima](https://github.com/abiosoft/colima): 
+### Install software to run containers like [Docker](https://www.docker.com/get-started/) or [Colima](https://github.com/abiosoft/colima): 
 
 ```bash
 # Install Docker
@@ -52,15 +128,6 @@ brew install colima
 
 # Start the Colima VM
 colima start
-```
-## Installation
-### Clone the repository
-
-```bash
-# Git glone the repo
-git clone https://github.com/chelseaisaac/torchtitan-runai-distributed.git
-# Change directory to the repo
-cd torchtitan-runai-distributed/
 ```
 
 ### NGC Container Registry Setup
@@ -85,6 +152,16 @@ Configure a credential helper to remove this warning. See
 https://docs.docker.com/engine/reference/commandline/login/#credential-stores
 
 Login Succeeded
+```
+
+## Installation
+### Clone the repository
+
+```bash
+# Git glone the repo
+git clone https://github.com/chelseaisaac/torchtitan-runai-distributed.git
+# Change directory to the repo
+cd torchtitan-runai-distributed/
 ```
 
 ### Build Your Container
