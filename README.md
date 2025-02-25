@@ -99,16 +99,17 @@ docker push nvcr.io/xvy2tenvwbmg/torchtitan-dist
 ```
 
 Add your [NGC Account & Personal API Key](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#credentials) as a Run:ai Credential to pull containers from nvcr.io 
+
 <img width="503" alt="Screenshot 2025-02-25 at 8 50 57 AM" src="https://github.com/user-attachments/assets/883d2bd3-1637-45c9-9be7-fc2380f9bcac" />
 1. Navigate to the **Credentials** page illustrated in the image above
 2. Click + NEW CREDENTIALS and select Docker registry from the drop down menu. You will be taken to the New credential creation page.
-3. Select the Scope for your NGC credential. The secret will be usable by any workload launched within the scope. For example, if your scope is set at the department level, all workloads launched in any project associated with that department can use the secret, regardless of which user created the credential, or launched the workload.
+3. Select the Scope for your new NGC credential. The secret will be usable by any workload launched within the scope. For example, if your scope is set at the department level, all workloads launched in any project associated with that department can use the secret, regardless of which user created the credential, or launched the workload.
 4. Enter a name and description for the credential. This will be visible to any cluster user.
 5. Select New secret.
 6. For username, use $oauthtoken.
 7. For password, paste your NGC Personal API token.
 8. Under Docker Registry URL, enter nvcr.io.
-9. Click CREATE CREDENTIALS. Your credentials will now be saved in the cluster.
+9. Click CREATE CREDENTIALS. Your credentials will now be saved in the cluster and shall be used when you pull a container from your private registry.
 
 ### Start a Multi-Node Training Run
 Below is an example to submit a Llama 3 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node) with the Run:ai CLI. In this example, we also pass two environment variables denoted with a '-e' flag that allows you to adjust your configuration file (.toml) to leverage [Llama 8B, 70B, or 405B](https://github.com/chelseaisaac/torchtitan-runai-distributed/tree/main/train_configs) and pass your HuggingFace Token. 
