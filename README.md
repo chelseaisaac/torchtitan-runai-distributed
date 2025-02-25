@@ -100,9 +100,9 @@ docker push nvcr.io/xvy2tenvwbmg/torchtitan-dist
 
 ### Add your [NGC Account & Personal API Key](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#credentials) as a Run:ai Credential to pull containers from nvcr.io 
 
-<img width="503" alt="Screenshot 2025-02-25 at 8 50 57 AM" src="https://github.com/user-attachments/assets/883d2bd3-1637-45c9-9be7-fc2380f9bcac" />
+<img width="503" alt="Screenshot 2025-02-25 at 8 50 57 AM" src="https://github.com/user-attachments/assets/362465f1-39fd-4e85-b3f9-d6057f747ac6" />
 
-1. Navigate to the **Credentials** page illustrated in the image above.
+1. Navigate to the **Credentials** page illustrated in the image above (steps #1 - #3).
 2. Click + NEW CREDENTIALS and select Docker registry from the drop down menu. You will be taken to the New credential creation page.
 3. Select the Scope for your new NGC credential. The secret will be usable by any workload launched within the scope. For example, if your scope is set at the department level, all workloads launched in any project associated with that department can use the secret, regardless of which user created the credential, or launched the workload.
 4. Enter a name and description for the credential. This will be visible to any cluster user.
