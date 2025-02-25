@@ -64,7 +64,7 @@ cd torchtitan-runai-distributed/
 ```
 
 ### NGC Container Registry Setup
-If you are already familiar with Docker and have a private container registry, you may skip this section to **"Start a Multi-Node Training Run"** after you've pushed your pre-built container to your registry using the Dockerfile referenced above. 
+If you are already familiar with Docker and have a private container registry, you may skip this section to **[Start a Multi-Node Training Run](#start-a-multi-node-training-run)** after you've pushed your pre-built container to your registry using the Dockerfile referenced above. 
 
 For this example, we leverage Nvidia's Container Registry to push and pull our pre-built containers from. 
 1. First, generate your [personal API key](https://docs.nvidia.com/ngc/gpu-cloud/ngc-private-registry-user-guide/index.html#generating-personal-api-key) from your NGC account and save it somewhere safe. You'll need it in step 2.
@@ -102,7 +102,7 @@ docker push nvcr.io/xvy2tenvwbmg/torchtitan-dist
 ### Create a NGC Credential in Run:ai
 Add your [NGC Account & Personal API Key](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#credentials) as a Run:ai Credential to pull containers from nvcr.io 
 
-<img width="503" alt="Screenshot 2025-02-25 at 8 50 57 AM" src="https://github.com/user-attachments/assets/362465f1-39fd-4e85-b3f9-d6057f747ac6" />
+<img width="503" alt="Screenshot 2025-02-25 at 8 50 57 AM" src="https://github.com/user-attachments/assets/362465f1-39fd-4e85-b3f9-d6057f747ac6" /><br>
 
 1. Navigate to the **Credentials** page illustrated in the image above (steps #1 - #3).
 2. Click + NEW CREDENTIALS and select Docker registry from the drop down menu. You will be taken to the New credential creation page.
@@ -136,7 +136,7 @@ runai submit --name torchtitan \
 -e HF_TOKEN=$HF_TOKEN
 ```
 
-**Llama 405B Example** _(Note: We've added additional environment variables to improve redundancies in the event you encounter pods restarts or throttling)_
+**Llama 405B Example** <br>_(Note: We've added additional environment variables to improve redundancies in the event you encounter pods restarts or throttling)_
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=15 -g 8 \
         -i nvcr.io/<ORG NAME>/torchtitan-dist \
@@ -147,7 +147,7 @@ runai submit-dist pytorch --name distributed-training-pytorch --workers=15 -g 8 
         -e HF_HUB_DOWNLOAD_TIMEOUT=120
 ```
 
-**Persistent Volume Claim Example**
+**Persistent Volume Claim Example**<br>
 If you'd like to run a training job with a **Persistent Volume Claim (PVC)** attached, you need to add the _--existing-pvc_ argument along with the pvc name and pvc mount path:
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
