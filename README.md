@@ -25,7 +25,7 @@ If you would like to learn more about distributed training with Run:ai, please r
 
 ### Pre-work
 
-Export your HuggingFace access token in your terminal.
+Export your HuggingFace access token in your terminal:
 
 ```
 $ export HF_TOKEN="YOUR_HF_TOKEN"
@@ -33,15 +33,32 @@ $ echo $HF_TOKEN
 YOUR_HF_TOKEN
 ```
 
-Your HF token will be referenced in the [run_llama_train.sh](run_llama_train.sh) script.
+Your HF token will be referenced in the [run_llama_train.sh](run_llama_train.sh) script:
 
 ```
 # Be sure to export your huggingface token via terminal e.g. export HF_TOKEN=<your HF Token> 
 python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --hf_token=$HF_TOKEN
 ```
 
+Install software to run containers like [Docker](https://www.docker.com/get-started/) or [Colima](https://github.com/abiosoft/colima): 
 
-## Data Parallelism (FDSP) with PyTorch using torchtitan
+```
+# Install Docker
+brew install --cask docker
+# Install Colima
+brew install colima
+```
+## Installation
+### Clone the repository
+
+```
+# Git glone the repo
+git clone https://github.com/chelseaisaac/torchtitan-runai-distributed.git
+# Change directory to the repo
+cd torchtitan-runai-distributed/
+```
+
+## Use the Dockerfile to build your container
 If you want to create your own image, you can edit your code, create your image and push the image to your image registry with the following commands:
 
 ```
@@ -50,7 +67,7 @@ docker push nvcr.io/<ORG ID>/torchtitan-dist
 ```
 
 ### Start a multi-node training run
-Llama 3 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node). 
+Llama 3 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node). We pass an environment variable (-e) that allows you to adjust your configuration file (.toml) to leverage [Llama 8B, 70B, or 405B](https://github.com/chelseaisaac/torchtitan-runai-distributed/tree/main/train_configs).
 
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
@@ -73,8 +90,7 @@ runai submit --name torchtitan \
 -g 8 
 ```
 
-## To-do list
-- Test with Llama3-70b model with FDSP and TP (w/ a minumum of 32 GPUs)
+## To-do List
 - Test with Llama3-405b model with FSDP and TP
 
 ### Modications from the the repository (& why):
