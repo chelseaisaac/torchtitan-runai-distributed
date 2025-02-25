@@ -154,8 +154,8 @@ https://docs.docker.com/engine/reference/commandline/login/#credential-stores
 Login Succeeded
 ```
 
-## Installation
-### Clone the repository
+## How to use the repository
+### Git clone the repository
 
 ```bash
 # Git glone the repo
