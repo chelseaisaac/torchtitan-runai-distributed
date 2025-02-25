@@ -127,7 +127,9 @@ Copyright (c) 2014-2024 Facebook Inc.
 ```
 
 # To-Do List
-- Test with Llama3-405b model with FSDP and TP
+- Test with Llama 3 8B — Completed
+- Test with Llama 3 70B — Completed
+- Test with Llama 3 405b — Not Started (Need 8 nodes or more)
 
 ### Modications from the the repository (& why):
 
