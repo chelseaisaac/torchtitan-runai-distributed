@@ -49,6 +49,9 @@ brew install --cask docker
 
 # Install Colima
 brew install colima
+
+# Start the Colima VM
+colima start
 ```
 ## Installation
 ### Clone the repository
@@ -61,14 +64,53 @@ cd torchtitan-runai-distributed/
 ```
 
 ### Use the [Dockerfile](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/Dockerfile) to build your container
-If you want to create your own image, you can edit your code, create your image and push the image to your image registry with the following commands:
+If you are already familiar with Docker and have a private container registry, you may skip to "Start a Multi-Node Training Run" after you've pushed your pre-built container to your registry using the Dockerfile referenced above. 
 
+For this example we leverage Nvidia's Container Registry to push and pull our pre-built containers from. 
+1. First, generate your [personal API key](https://docs.nvidia.com/ngc/gpu-cloud/ngc-private-registry-user-guide/index.html#generating-personal-api-key) from your NGC account and save it somewhere safe. You'll need it in step 2.
+2. Log into nvcr.io using your terminal
 ```bash
-docker build -t nvcr.io/<ORG ID>/torchtitan-dist .
-docker push nvcr.io/<ORG ID>/torchtitan-dist 
+# Run the following docker command to start the login process to nvcr.io
+docker login nvcr.io
+
+# Enter $oauthtoken as your Username
+Username: $oauthtoken
+
+# Copy and paste your Personal API key from NGC from a few steps prior and hit enter 
+Password:
+
+# You should see the following message after a successful authentication
+WARNING! Your password will be stored unencrypted in /root/username/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credential-stores
+
+Login Succeeded
 ```
 
-### Start a multi-node training run
+Adjust the docker commands below by inserting your [Organization Name located in your NGC Account's Organization Profile](https://docs.nvidia.com/ngc/gpu-cloud/ngc-user-guide/index.html#ngc-org-owner-users) (e.g. **xvy2tenvwbmg**) and run the command in your terminal:
+
+```bash
+## Container URL is as follows <registry-host>/<namespace>/<repository>:<tag>
+## Make sure to update the command with your NGC Org Name e.g. docker build -t nvcr.io/<ORG NAME>/torchtitan-dist:latest .
+docker build -t nvcr.io/xvy2tenvwbmg/torchtitan-dist:latest .
+
+## After the container is built, run the following command to push the container to your container registry 
+docker push nvcr.io/xvy2tenvwbmg/torchtitan-dist 
+```
+
+Add your [NGC Account & Personal API Key](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#credentials) as a Run:ai Credential to pull containers from nvcr.io 
+<img width="503" alt="Screenshot 2025-02-25 at 8 50 57 AM" src="https://github.com/user-attachments/assets/883d2bd3-1637-45c9-9be7-fc2380f9bcac" />
+1. Navigate to the **Credentials** page illustrated in the image above
+2. Click + NEW CREDENTIALS and select Docker registry from the drop down menu. You will be taken to the New credential creation page.
+3. Select the Scope for your NGC credential. The secret will be usable by any workload launched within the scope. For example, if your scope is set at the department level, all workloads launched in any project associated with that department can use the secret, regardless of which user created the credential, or launched the workload.
+4. Enter a name and description for the credential. This will be visible to any cluster user.
+5. Select New secret.
+6. For username, use $oauthtoken.
+7. For password, paste your NGC Personal API token.
+8. Under Docker Registry URL, enter nvcr.io.
+9. Click CREATE CREDENTIALS. Your credentials will now be saved in the cluster.
+
+### Start a Multi-Node Training Run
 Below is an example to submit a Llama 3 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node) with the Run:ai CLI. In this example, we also pass two environment variables denoted with a '-e' flag that allows you to adjust your configuration file (.toml) to leverage [Llama 8B, 70B, or 405B](https://github.com/chelseaisaac/torchtitan-runai-distributed/tree/main/train_configs) and pass your HuggingFace Token. 
 
 Note: When training the Llama 70B or 405B models using tensor parallelism, it's essential that the model's dimension (8192) is divisible by the number of nodes/shards. For the Llama 70B model, a minimum of 32 GPUs is required. During our tests with the Llama 405B model using 8 nodes (64 GPUs), we encountered an out of memory error.
