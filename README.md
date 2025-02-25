@@ -87,7 +87,7 @@ https://docs.docker.com/engine/reference/commandline/login/#credential-stores
 Login Succeeded
 ```
 
-Adjust the docker commands below by inserting your [Organization Name located in your NGC Account's Organization Profile](https://docs.nvidia.com/ngc/gpu-cloud/ngc-user-guide/index.html#ngc-org-owner-users) (e.g. **xvy2tenvwbmg**) and run the command in your terminal:
+### Adjust the docker commands below by inserting your [Organization Name located in your NGC Account's Organization Profile](https://docs.nvidia.com/ngc/gpu-cloud/ngc-user-guide/index.html#ngc-org-owner-users) (e.g. **xvy2tenvwbmg**) and run the command in your terminal:
 
 ```bash
 ## Container URL is as follows <registry-host>/<namespace>/<repository>:<tag>
@@ -98,7 +98,7 @@ docker build -t nvcr.io/xvy2tenvwbmg/torchtitan-dist:latest .
 docker push nvcr.io/xvy2tenvwbmg/torchtitan-dist 
 ```
 
-Add your [NGC Account & Personal API Key](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#credentials) as a Run:ai Credential to pull containers from nvcr.io 
+### Add your [NGC Account & Personal API Key](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#credentials) as a Run:ai Credential to pull containers from nvcr.io 
 
 <img width="503" alt="Screenshot 2025-02-25 at 8 50 57 AM" src="https://github.com/user-attachments/assets/883d2bd3-1637-45c9-9be7-fc2380f9bcac" />
 
