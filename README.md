@@ -91,6 +91,27 @@ runai submit --name torchtitan \
 -i nvcr.io/<ORG ID>/torchtitan \
 -g 8 
 ```
+### Upon container's initialization
+The script [run_llama_train.sh](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/sarabiap-patch-3/run_llama_train.sh) will execute on start up. View the logs in the UI or use kubectl:
+
+```bash
+# Return list of pods
+kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+pod1-0-0                    1/1     Running     0          16d
+pod2-0-0                    1/1     Running     1          3d7h
+# Return pod logs
+kubectl logs pod1-0-0
+=============
+== PyTorch ==
+=============
+
+NVIDIA Release 25.01 (build 134983853)
+PyTorch Version 2.6.0a0+ecf3bae
+Container image Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+Copyright (c) 2014-2024 Facebook Inc.
+.....................................
+```
 
 # To-Do List
 - Test with Llama3-405b model with FSDP and TP
