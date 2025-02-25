@@ -27,7 +27,7 @@ If you would like to learn more about distributed training with Run:ai, please r
 
 Export your HuggingFace access token in your terminal:
 
-```
+```bash
 export HF_TOKEN=<YOUR_HF_TOKEN>
 echo $HF_TOKEN
 YOUR_HF_TOKEN
@@ -35,14 +35,14 @@ YOUR_HF_TOKEN
 
 Your HuggingFace token will be referenced in the [run_llama_train.sh](run_llama_train.sh) script to download the Llama Tokenizer:
 
-```
+```bash
 # Be sure to export your huggingface token via terminal e.g. export HF_TOKEN=<your HF Token> 
-python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --hf_token=$HF_TOKEN
+python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --local_dir=/torchtitan/datasets/tokenizer/ --hf_token=$HF_TOKEN
 ```
 
 Install software to run containers like [Docker](https://www.docker.com/get-started/) or [Colima](https://github.com/abiosoft/colima): 
 
-```
+```bash
 # Install Docker
 brew install --cask docker
 # Install Colima
@@ -51,23 +51,25 @@ brew install colima
 ## Installation
 ### Clone the repository
 
-```
+```bash
 # Git glone the repo
 git clone https://github.com/chelseaisaac/torchtitan-runai-distributed.git
 # Change directory to the repo
 cd torchtitan-runai-distributed/
 ```
 
-### Use the Dockerfile to build your container
+### Use the [Dockerfile](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/Dockerfile) to build your container to build your container
 If you want to create your own image, you can edit your code, create your image and push the image to your image registry with the following commands:
 
-```
+```bash
 docker build -t nvcr.io/<ORG ID>/torchtitan-dist .
 docker push nvcr.io/<ORG ID>/torchtitan-dist 
 ```
 
 ### Start a multi-node training run
-Llama 3 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node). We pass an environment variable (-e) that allows you to adjust your configuration file (.toml) to leverage [Llama 8B, 70B, or 405B](https://github.com/chelseaisaac/torchtitan-runai-distributed/tree/main/train_configs) and your HuggingFace Token.
+Below is an example to submit a Llama 3 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node) with the Run:ai CLI. In this example, we also pass two environment variables denoted with a '-e' flag that allows you to adjust your configuration file (.toml) to leverage [Llama 8B, 70B, or 405B](https://github.com/chelseaisaac/torchtitan-runai-distributed/tree/main/train_configs) and pass your HuggingFace Token. 
+
+Note: When training the Llama 70B or 405B models using tensor parallelism, it's essential that the model's dimension (8192) is divisible by the number of nodes/shards. For the Llama 70B model, a minimum of 32 GPUs is required. During our tests with the Llama 405B model using 8 nodes (64 GPUs), we encountered an out of memory error.
 
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
@@ -75,8 +77,7 @@ runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"} \
         -e HF_TOKEN=$HF_TOKEN
 ```
-If you'd like to run the same job with a PVC attached, here's the command:
-
+If you'd like to run a training job with a Persistent Volume Claim (PVC) attached, you need to add the --existing-pvc argument along with the pvc name and pvc mount path:
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -i nvcr.io/<ORG ID>/torchtitan-dist \
@@ -84,6 +85,16 @@ runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"} \
         -e HF_TOKEN=$HF_TOKEN
 ```
+You can also verify your PVC's claim name by running the following kubectl command:
+```bash
+kubectl get pvc
+NAME                           STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+psa-pvc-project-7vgcc          Bound     pvc-1387dfc8-a6d7-4cb7-894a-59d58cd91f30   10Ti       RWX            zonal-rwx      <unset>                 23d
+smcd-pvc-project-i0qim         Bound     pvc-6a70ec26-c9d5-4e99-94d0-54fe25211b92   10Ti       RWX            zonal-rwx      <unset>                 12d
+what-is-a-pvc-project-57wbe    Bound     pvc-2a15ca56-bdb6-4f0a-ab37-96e4be90dec3   10Ti       RWX            zonal-rwx      <unset>                 12d
+```
+
+To learn more about PVC's and how to set them up, read the [DGXC Sprint Guide](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#pvc). 
 
 If you wanted to do a single-node training run with 8 GPUs:
 ```bash
@@ -91,14 +102,37 @@ runai submit --name torchtitan \
 -i nvcr.io/<ORG ID>/torchtitan \
 -g 8 
 ```
+### Upon container's initialization
+The script [run_llama_train.sh](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/sarabiap-patch-3/run_llama_train.sh) will execute on start up. View the logs in the UI or use kubectl:
+
+```bash
+# Return list of pods
+kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+pod1-0-0                    1/1     Running     0          16d
+pod2-0-0                    1/1     Running     1          3d7h
+# Return pod logs
+kubectl logs pod1-0-0
+=============
+== PyTorch ==
+=============
+
+NVIDIA Release 25.01 (build 134983853)
+PyTorch Version 2.6.0a0+ecf3bae
+Container image Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+Copyright (c) 2014-2024 Facebook Inc.
+.....................................
+```
 
 # To-Do List
-- Test with Llama3-405b model with FSDP and TP
+- Test with Llama 3 8B — Completed
+- Test with Llama 3 70B — Completed
+- Test with Llama 3 405b — Not Started (Need 8 nodes or more)
 
 ### Modications from the the repository (& why):
 
 The training scripts presented are slightly modified versions of the example scripts that 'torchtitan' provides in their repository.
 * [run_llama_train.sh](run_llama_train.sh) - Add environment variables to support distributed PyTorch training with Run:ai.
-* [torchtitan/utils.py](torchtitan/utils.py) - Updated seed in to be within 32-bit range. The original seed was too large and triggered a runtime error in our environment (DGX Cloud on AWS).
+* [torchtitan/utils.py](torchtitan/utils.py) - Updated seed to be within 32-bit range. The original seed was too large and triggered a runtime error in our environment (DGX Cloud on AWS).
 * [torchtitan/train_spec.py](torchtitan/train_spec.py) - Added loss_fn function
 * [train.py](train.py) - Changed the labels in train.py. Reshaped the predictions before calculating the loss.
