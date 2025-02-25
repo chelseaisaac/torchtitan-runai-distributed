@@ -88,11 +88,8 @@ You can also verify your PVC's claim name by running the following kubectl comma
 ```bash
 kubectl get pvc
 NAME                           STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
-canva-demo-project-6rdmw       Pending                                                                        zonal-rwx      <unset>                 11d
-drew-pvc-test-project-4fv0y    Pending                                                                                       <unset>                 13d
-nemo-lora-ckpt-project-phbfw   Pending                                                                        standard-rwx   <unset>                 31d
 psa-pvc-project-7vgcc          Bound     pvc-1387dfc8-a6d7-4cb7-894a-59d58cd91f30   10Ti       RWX            zonal-rwx      <unset>                 23d
-smcd-demo-project-i0qim        Bound     pvc-6a70ec26-c9d5-4e99-94d0-54fe25211b92   10Ti       RWX            zonal-rwx      <unset>                 12d
+smcd-pvc-project-i0qim         Bound     pvc-6a70ec26-c9d5-4e99-94d0-54fe25211b92   10Ti       RWX            zonal-rwx      <unset>                 12d
 what-is-a-pvc-project-57wbe    Bound     pvc-2a15ca56-bdb6-4f0a-ab37-96e4be90dec3   10Ti       RWX            zonal-rwx      <unset>                 12d
 ```
 
