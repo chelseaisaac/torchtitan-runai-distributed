@@ -63,10 +63,10 @@ git clone https://github.com/chelseaisaac/torchtitan-runai-distributed.git
 cd torchtitan-runai-distributed/
 ```
 
-### Use the [Dockerfile](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/Dockerfile) to build your container
-If you are already familiar with Docker and have a private container registry, you may skip to "Start a Multi-Node Training Run" after you've pushed your pre-built container to your registry using the Dockerfile referenced above. 
+### Build Your Container
+Leverage the [Dockerfile](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/Dockerfile) to build your container. If you are already familiar with Docker and have a private container registry, you may skip this section to **"Start a Multi-Node Training Run"** after you've pushed your pre-built container to your registry using the Dockerfile referenced above. 
 
-For this example we leverage Nvidia's Container Registry to push and pull our pre-built containers from. 
+For this example, we leverage Nvidia's Container Registry to push and pull our pre-built containers from. 
 1. First, generate your [personal API key](https://docs.nvidia.com/ngc/gpu-cloud/ngc-private-registry-user-guide/index.html#generating-personal-api-key) from your NGC account and save it somewhere safe. You'll need it in step 2.
 2. Log into nvcr.io using your terminal
 ```bash
@@ -117,20 +117,34 @@ Below is an example to submit a Llama 3 8B model on 16 GPUs (2 nodes = 1 primary
 
 Note: When training the Llama 70B or 405B models using tensor parallelism, it's essential that the model's dimension (8192) is divisible by the number of nodes/shards. For the Llama 70B model, a minimum of 32 GPUs is required. During our tests with the Llama 405B model using 8 nodes (64 GPUs), we encountered an out of memory error.
 
+**Llama 8B Example**
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
-        -i nvcr.io/<ORG ID>/torchtitan-dist \
+        -i nvcr.io/<ORG NAME>/torchtitan-dist \
         -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"} \
         -e HF_TOKEN=$HF_TOKEN
 ```
-If you'd like to run a training job with a Persistent Volume Claim (PVC) attached, you need to add the --existing-pvc argument along with the pvc name and pvc mount path:
+
+**Llama 405B Example** _(Note: We've added additional environment variables to improve redundancies in the event you encounter pods starting or throttling)_
+```bash
+runai submit-dist pytorch --name smcdo-torchtitan --workers=15 -g 8 \
+        -i nvcr.io/nvidian/smcd-torchtitan:20250221_1 \
+        -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_405b.toml"} \
+        -e HF_TOKEN=$HF_TOKEN \
+        -e RDZV_TIMEOUT=3600 \
+        -e HF_HUB_ETAG_TIMEOUT=500 \
+        -e HF_HUB_DOWNLOAD_TIMEOUT=120
+```
+
+If you'd like to run a training job with a **Persistent Volume Claim (PVC)** attached, you need to add the _--existing-pvc_ argument along with the pvc name and pvc mount path:
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
-        -i nvcr.io/<ORG ID>/torchtitan-dist \
+        -i nvcr.io/<ORG NAME>/torchtitan-dist \
         --existing-pvc "claimname=<CLAIM_NAME>,path=<PATH>"  \
         -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"} \
         -e HF_TOKEN=$HF_TOKEN
 ```
+
 You can also verify your PVC's claim name by running the following kubectl command:
 ```bash
 kubectl get pvc
@@ -145,7 +159,7 @@ To learn more about PVC's and how to set them up, read the [DGXC Sprint Guide](h
 If you wanted to do a single-node training run with 8 GPUs:
 ```bash
 runai submit --name torchtitan \
--i nvcr.io/<ORG ID>/torchtitan \
+-i nvcr.io/<ORG NAME>/torchtitan \
 -g 8 
 ```
 ### Upon container's initialization
