@@ -63,8 +63,8 @@ git clone https://github.com/chelseaisaac/torchtitan-runai-distributed.git
 cd torchtitan-runai-distributed/
 ```
 
-### Build Your Container
-Leverage the [Dockerfile](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/Dockerfile) to build your container. If you are already familiar with Docker and have a private container registry, you may skip this section to **"Start a Multi-Node Training Run"** after you've pushed your pre-built container to your registry using the Dockerfile referenced above. 
+### NGC Container Registry Setup
+If you are already familiar with Docker and have a private container registry, you may skip this section to **"Start a Multi-Node Training Run"** after you've pushed your pre-built container to your registry using the Dockerfile referenced above. 
 
 For this example, we leverage Nvidia's Container Registry to push and pull our pre-built containers from. 
 1. First, generate your [personal API key](https://docs.nvidia.com/ngc/gpu-cloud/ngc-private-registry-user-guide/index.html#generating-personal-api-key) from your NGC account and save it somewhere safe. You'll need it in step 2.
@@ -87,7 +87,8 @@ https://docs.docker.com/engine/reference/commandline/login/#credential-stores
 Login Succeeded
 ```
 
-### Adjust the docker commands below by inserting your [Organization Name located in your NGC Account's Organization Profile](https://docs.nvidia.com/ngc/gpu-cloud/ngc-user-guide/index.html#ngc-org-owner-users) (e.g. **xvy2tenvwbmg**) and run the command in your terminal:
+### Build Your Container
+Leverage the [Dockerfile](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/Dockerfile) to build your container. You make adjustments as needed to support your unique environment. To kickoff the container build, adjust the docker commands below by inserting your [Organization Name located in your NGC Account's Organization Profile](https://docs.nvidia.com/ngc/gpu-cloud/ngc-user-guide/index.html#ngc-org-owner-users) (e.g. **xvy2tenvwbmg**) and run the command in your terminal:
 
 ```bash
 ## Container URL is as follows <registry-host>/<namespace>/<repository>:<tag>
