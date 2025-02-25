@@ -182,8 +182,28 @@ A Persistent Volume Claim (PVC) is a request for dedicated storage that allows y
 9. (Optional) In the Restrictions pane, you can use the toggle switch to make the storage read-only if desired.
 10. Click CREATE DATA SOURCE. You will be taken to the Data sources overview page, where you can view your new PVC data source.
 
-### Upon container's initialization
-The script [run_llama_train.sh](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/sarabiap-patch-3/run_llama_train.sh) will execute on start up. View the logs in the UI or use kubectl:
+### Upon Pod Initialization
+The script [run_llama_train.sh](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/sarabiap-patch-3/run_llama_train.sh) will execute on start up. 
+
+
+
+### View Logs
+
+Using Run:ai CLI
+
+```bash
+# Return list of jobs
+runai list jobs
+Showing jobs for project customer-success-engineering-test-dept
+NAME       STATUS   AGE  NODE            IMAGE                                    TYPE     PROJECT                                 USER                   GPUs Allocated (Requested)  PODs Running (Pending)  SERVICE URL(S)
+nccl-test  Deleted  68d  -               pytorch/pytorch:latest                   Mpi      customer-success-engineering-test-dept  psarabia@nvidia.com    16.00          (16.00)      16            (0)
+
+# Return logs
+runai logs nccl-test
+<Your Logs Here>         
+```
+
+Using kubectl
 
 ```bash
 # Return list of pods
@@ -204,6 +224,11 @@ Container image Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES. All rights 
 Copyright (c) 2014-2024 Facebook Inc.
 .....................................
 ```
+
+View the logs in the UI
+
+<img width="2480" alt="Screenshot 2025-02-25 at 11 17 43 AM" src="https://github.com/user-attachments/assets/2d616a89-c28d-4350-93b2-dca77b0199bc" />
+
 
 # To-Do List
 - Test with Llama 3 8B — Completed
