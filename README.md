@@ -28,12 +28,12 @@ If you would like to learn more about distributed training with Run:ai, please r
 Export your HuggingFace access token in your terminal:
 
 ```
-$ export HF_TOKEN="YOUR_HF_TOKEN"
-$ echo $HF_TOKEN
+export HF_TOKEN=<YOUR_HF_TOKEN>
+echo $HF_TOKEN
 YOUR_HF_TOKEN
 ```
 
-Your HF token will be referenced in the [run_llama_train.sh](run_llama_train.sh) script:
+Your HuggingFace token will be referenced in the [run_llama_train.sh](run_llama_train.sh) script to download the Llama Tokenizer:
 
 ```
 # Be sure to export your huggingface token via terminal e.g. export HF_TOKEN=<your HF Token> 
@@ -67,12 +67,13 @@ docker push nvcr.io/<ORG ID>/torchtitan-dist
 ```
 
 ### Start a multi-node training run
-Llama 3 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node). We pass an environment variable (-e) that allows you to adjust your configuration file (.toml) to leverage [Llama 8B, 70B, or 405B](https://github.com/chelseaisaac/torchtitan-runai-distributed/tree/main/train_configs).
+Llama 3 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node). We pass an environment variable (-e) that allows you to adjust your configuration file (.toml) to leverage [Llama 8B, 70B, or 405B](https://github.com/chelseaisaac/torchtitan-runai-distributed/tree/main/train_configs) and your HuggingFace Token.
 
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -i nvcr.io/<ORG ID>/torchtitan-dist \
-        -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"}
+        -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"} \
+        -e HF_TOKEN=$HF_TOKEN
 ```
 If you'd like to run the same job with a PVC attached, here's the command:
 
@@ -80,7 +81,8 @@ If you'd like to run the same job with a PVC attached, here's the command:
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -i nvcr.io/<ORG ID>/torchtitan-dist \
         --existing-pvc "claimname=<CLAIM_NAME>,path=<PATH>"  \
-        -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"}
+        -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"} \
+        -e HF_TOKEN=$HF_TOKEN
 ```
 
 If you wanted to do a single-node training run with 8 GPUs:
