@@ -67,7 +67,7 @@ docker push nvcr.io/<ORG ID>/torchtitan-dist
 ```
 
 ### Start a multi-node training run
-Llama 3 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node). We pass an environment variable (-e) that allows you to adjust your configuration file (.toml) to leverage [Llama 8B, 70B, or 405B](https://github.com/chelseaisaac/torchtitan-runai-distributed/tree/main/train_configs) and your HuggingFace Token.
+Below is an example to submit a Llama 3 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node) with the Run:ai CLI. In this example, we also pass two environment variables denoted with a '-e' flag that allows you to adjust your configuration file (.toml) to leverage [Llama 8B, 70B, or 405B](https://github.com/chelseaisaac/torchtitan-runai-distributed/tree/main/train_configs) and pass your HuggingFace Token.
 
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
@@ -75,7 +75,7 @@ runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"} \
         -e HF_TOKEN=$HF_TOKEN
 ```
-If you'd like to run the same job with a PVC attached, here's the command:
+If you'd like to run the same job with a Persistent Volume Claim (PVC) attached, here's the command:
 
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
@@ -84,6 +84,19 @@ runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"} \
         -e HF_TOKEN=$HF_TOKEN
 ```
+You can also verify your PVC's claim name by running the following kubectl command:
+```bash
+kubectl get pvc
+NAME                           STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+canva-demo-project-6rdmw       Pending                                                                        zonal-rwx      <unset>                 11d
+drew-pvc-test-project-4fv0y    Pending                                                                                       <unset>                 13d
+nemo-lora-ckpt-project-phbfw   Pending                                                                        standard-rwx   <unset>                 31d
+psa-pvc-project-7vgcc          Bound     pvc-1387dfc8-a6d7-4cb7-894a-59d58cd91f30   10Ti       RWX            zonal-rwx      <unset>                 23d
+smcd-demo-project-i0qim        Bound     pvc-6a70ec26-c9d5-4e99-94d0-54fe25211b92   10Ti       RWX            zonal-rwx      <unset>                 12d
+what-is-a-pvc-project-57wbe    Bound     pvc-2a15ca56-bdb6-4f0a-ab37-96e4be90dec3   10Ti       RWX            zonal-rwx      <unset>                 12d
+```
+
+To learn more about PVC's and how to set them up, read the [DGXC Sprint Guide](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#pvc). 
 
 If you wanted to do a single-node training run with 8 GPUs:
 ```bash
