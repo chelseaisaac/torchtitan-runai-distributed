@@ -58,7 +58,7 @@ git clone https://github.com/chelseaisaac/torchtitan-runai-distributed.git
 cd torchtitan-runai-distributed/
 ```
 
-## Use the Dockerfile to build your container
+### Use the Dockerfile to build your container
 If you want to create your own image, you can edit your code, create your image and push the image to your image registry with the following commands:
 
 ```
@@ -90,7 +90,7 @@ runai submit --name torchtitan \
 -g 8 
 ```
 
-## To-do List
+# To-Do List
 - Test with Llama3-405b model with FSDP and TP
 
 ### Modications from the the repository (& why):
