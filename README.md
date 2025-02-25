@@ -27,7 +27,7 @@ If you would like to learn more about distributed training with Run:ai, please r
 
 Export your HuggingFace access token in your terminal:
 
-```
+```bash
 export HF_TOKEN=<YOUR_HF_TOKEN>
 echo $HF_TOKEN
 YOUR_HF_TOKEN
@@ -35,14 +35,14 @@ YOUR_HF_TOKEN
 
 Your HuggingFace token will be referenced in the [run_llama_train.sh](run_llama_train.sh) script to download the Llama Tokenizer:
 
-```
+```bash
 # Be sure to export your huggingface token via terminal e.g. export HF_TOKEN=<your HF Token> 
 python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --local_dir=/torchtitan/datasets/tokenizer/ --hf_token=$HF_TOKEN
 ```
 
 Install software to run containers like [Docker](https://www.docker.com/get-started/) or [Colima](https://github.com/abiosoft/colima): 
 
-```
+```bash
 # Install Docker
 brew install --cask docker
 # Install Colima
@@ -51,7 +51,7 @@ brew install colima
 ## Installation
 ### Clone the repository
 
-```
+```bash
 # Git glone the repo
 git clone https://github.com/chelseaisaac/torchtitan-runai-distributed.git
 # Change directory to the repo
@@ -61,7 +61,7 @@ cd torchtitan-runai-distributed/
 ### Use the Dockerfile to build your container
 If you want to create your own image, you can edit your code, create your image and push the image to your image registry with the following commands:
 
-```
+```bash
 docker build -t nvcr.io/<ORG ID>/torchtitan-dist .
 docker push nvcr.io/<ORG ID>/torchtitan-dist 
 ```
