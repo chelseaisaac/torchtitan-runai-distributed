@@ -2,10 +2,10 @@ FROM nvcr.io/nvidia/pytorch:25.01-py3
 
 RUN git clone https://github.com/pytorch/torchtitan.git && \
     cd torchtitan && \
-    echo "torchao==0.8.0" >> .ci/docker/requirements.txt && \
-    pip install -r .ci/docker/requirements.txt && \
+    pip install -r requirements.txt && \
     pip install . && \
-    pip install --upgrade torch
+    pip install --upgrade torch && \
+    pip install torchao==0.8.0
 
 #Set the working directory
 WORKDIR /app
