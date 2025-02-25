@@ -23,7 +23,8 @@ If you would like to learn more about distributed training with Run:ai, please r
 4. Create a Hugging Face account and agree to Meta Llama 3.1 Community License agreement while signed into Hugging Face account. Generate a Hugging Face read access token in [account settings](https://huggingface.co/settings/tokens). It’s required to access the Llama3.1-8B model. (`torchtitan` currently supports training Llama 3.1 (8B, 70B, 405B) out of the box.)
 
 
-### Pre-work
+### Pre-Requisites
+Note: This repo assumes you have access to a DGXC Sprint/Run:ai cluster and have kubectl, kubeconfig, and the Run:ai CLI installed.
 
 Export your HuggingFace access token in your terminal:
 
@@ -45,6 +46,7 @@ Install software to run containers like [Docker](https://www.docker.com/get-star
 ```bash
 # Install Docker
 brew install --cask docker
+
 # Install Colima
 brew install colima
 ```
@@ -89,9 +91,9 @@ You can also verify your PVC's claim name by running the following kubectl comma
 ```bash
 kubectl get pvc
 NAME                           STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
-psa-pvc-project-7vgcc          Bound     pvc-1387dfc8-a6d7-4cb7-894a-59d58cd91f30   10Ti       RWX            zonal-rwx      <unset>                 23d
-smcd-pvc-project-i0qim         Bound     pvc-6a70ec26-c9d5-4e99-94d0-54fe25211b92   10Ti       RWX            zonal-rwx      <unset>                 12d
-what-is-a-pvc-project-57wbe    Bound     pvc-2a15ca56-bdb6-4f0a-ab37-96e4be90dec3   10Ti       RWX            zonal-rwx      <unset>                 12d
+psa-pvc-project-12345          Bound     pvc-1387dfc8-a6d7-4cb7-894a-59d58cd91f30   10Ti       RWX            zonal-rwx      <unset>                 23d
+smcd-pvc-project-67890         Bound     pvc-6a70ec26-c9d5-4e99-94d0-54fe25211b92   10Ti       RWX            zonal-rwx      <unset>                 12d
+what-is-pv-project-57wbe       Bound     pvc-2a15ca56-bdb6-4f0a-ab37-96e4be90dec3   10Ti       RWX            zonal-rwx      <unset>                 12d
 ```
 
 To learn more about PVC's and how to set them up, read the [DGXC Sprint Guide](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#pvc). 
@@ -111,6 +113,7 @@ kubectl get pods
 NAME                        READY   STATUS      RESTARTS   AGE
 pod1-0-0                    1/1     Running     0          16d
 pod2-0-0                    1/1     Running     1          3d7h
+
 # Return pod logs
 kubectl logs pod1-0-0
 =============
