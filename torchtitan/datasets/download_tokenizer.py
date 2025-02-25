@@ -23,7 +23,6 @@ def hf_download(
             repo_id=repo_id,
             filename=tokenizer_path,
             local_dir=local_dir,
-            local_dir_use_symlinks=False,
             token=hf_token,
         )
     except HTTPError as e:
