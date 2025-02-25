@@ -99,7 +99,8 @@ docker build -t nvcr.io/xvy2tenvwbmg/torchtitan-dist:latest .
 docker push nvcr.io/xvy2tenvwbmg/torchtitan-dist 
 ```
 
-### Add your [NGC Account & Personal API Key](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#credentials) as a Run:ai Credential to pull containers from nvcr.io 
+### Create a NGC Credential in Run:ai
+Add your [NGC Account & Personal API Key](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#credentials) as a Run:ai Credential to pull containers from nvcr.io 
 
 <img width="503" alt="Screenshot 2025-02-25 at 8 50 57 AM" src="https://github.com/user-attachments/assets/362465f1-39fd-4e85-b3f9-d6057f747ac6" />
 
@@ -126,6 +127,13 @@ runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -e HF_TOKEN=$HF_TOKEN
 ```
 
+**Single Node (8 GPU) Example**
+```bash
+runai submit --name torchtitan \
+-i nvcr.io/<ORG NAME>/torchtitan \
+-g 8 
+```
+
 **Llama 405B Example** _(Note: We've added additional environment variables to improve redundancies in the event you encounter pods restarts or throttling)_
 ```bash
 runai submit-dist pytorch --name smcdo-torchtitan --workers=15 -g 8 \
@@ -137,6 +145,7 @@ runai submit-dist pytorch --name smcdo-torchtitan --workers=15 -g 8 \
         -e HF_HUB_DOWNLOAD_TIMEOUT=120
 ```
 
+**Persistent Volume Claim Example**
 If you'd like to run a training job with a **Persistent Volume Claim (PVC)** attached, you need to add the _--existing-pvc_ argument along with the pvc name and pvc mount path:
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
@@ -155,14 +164,22 @@ smcd-pvc-project-67890         Bound     pvc-6a70ec26-c9d5-4e99-94d0-54fe25211b9
 what-is-pv-project-57wbe       Bound     pvc-2a15ca56-bdb6-4f0a-ab37-96e4be90dec3   10Ti       RWX            zonal-rwx      <unset>                 12d
 ```
 
-To learn more about PVC's and how to set them up, read the [DGXC Sprint Guide](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#pvc). 
+### Create a PVC in Run:ai
+A Persistent Volume Claim (PVC) is a request for dedicated storage that allows your data to persist beyond the lifecycle of a pod. It ensures that the data remains accessible to containers even after the pod is terminated. To learn more about PVC's and how to set them up, read the [DGXC Sprint Guide](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#pvc). 
 
-If you wanted to do a single-node training run with 8 GPUs:
-```bash
-runai submit --name torchtitan \
--i nvcr.io/<ORG NAME>/torchtitan \
--g 8 
-```
+<img width="373" alt="Screenshot 2025-02-25 at 10 08 01 AM" src="https://github.com/user-attachments/assets/2111fb2a-3565-4276-8702-9c18abdc635f" />
+
+1. After selecting PVC, you will be taken to the New data source creation page.
+2. Set a Scope for the PVC, and enter a name and description.
+3. Fill out the Data mount section of the form:
+4. Select a Storage class. Be sure to review the [DGX Cloud recommended storage classes](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#user-guide-recommended-storage-classes).
+5. Select the access mode configuration for the PVC - either read/write by one node, read only by many nodes, or read/write by many nodes.
+6. Specify a claim size to ensure a minimum capacity for the PVC.
+7. Choose the Filesystem option as the Volume mode (Block is unsupported).
+8. Specify a Container path to define what path the PVC will be accessible from in a running job.
+9. (Optional) In the Restrictions pane, you can use the toggle switch to make the storage read-only if desired.
+10. Click CREATE DATA SOURCE. You will be taken to the Data sources overview page, where you can view your new PVC data source.
+
 ### Upon container's initialization
 The script [run_llama_train.sh](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/sarabiap-patch-3/run_llama_train.sh) will execute on start up. View the logs in the UI or use kubectl:
 
