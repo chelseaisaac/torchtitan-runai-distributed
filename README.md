@@ -125,7 +125,7 @@ runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -e HF_TOKEN=$HF_TOKEN
 ```
 
-**Llama 405B Example** _(Note: We've added additional environment variables to improve redundancies in the event you encounter pods starting or throttling)_
+**Llama 405B Example** _(Note: We've added additional environment variables to improve redundancies in the event you encounter pods restarts or throttling)_
 ```bash
 runai submit-dist pytorch --name smcdo-torchtitan --workers=15 -g 8 \
         -i nvcr.io/nvidian/smcd-torchtitan:20250221_1 \
