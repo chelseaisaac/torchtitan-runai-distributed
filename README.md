@@ -93,10 +93,10 @@ sudo mv runai /usr/local/bin/runai
 
 # Authenticate your CLI
 runai login
-Go ot the following link in your browser:
-<Copy and paste this run.ai link>
+Go to the following link in your browser:
+<Copy and paste this run.ai URL>
 
-# Paste the verification code from your browser into your terminal
+# Paste the verification code from your web browser back into your terminal
 Enter verifcation code: #########
 
 INFO[0248] Logged in successfully
