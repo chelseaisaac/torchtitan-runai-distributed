@@ -227,8 +227,7 @@ Copyright (c) 2014-2024 Facebook Inc.
 
 View the logs in the UI
 
-<img width="2480" alt="Screenshot 2025-02-25 at 11 17 43 AM" src="https://github.com/user-attachments/assets/2d616a89-c28d-4350-93b2-dca77b0199bc" />
-
+<img width="2480" alt="Screenshot 2025-02-25 at 11 17 43 AM" src="https://github.com/user-attachments/assets/3ab3ee78-b6dd-48ef-b026-577d9748c204" />
 
 # To-Do List
 - Test with Llama 3 8B — Completed
