@@ -58,7 +58,7 @@ git clone https://github.com/chelseaisaac/torchtitan-runai-distributed.git
 cd torchtitan-runai-distributed/
 ```
 
-### Use the [Dockerfile](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/Dockerfile) to build your container to build your container
+### Use the [Dockerfile](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/Dockerfile) to build your container
 If you want to create your own image, you can edit your code, create your image and push the image to your image registry with the following commands:
 
 ```bash
