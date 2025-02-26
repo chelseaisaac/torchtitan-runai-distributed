@@ -173,7 +173,7 @@ Leverage the [Dockerfile](https://github.com/chelseaisaac/torchtitan-runai-distr
 ```bash
 ## Container URL is as follows <registry-host>/<namespace>/<repository>:<tag>
 ## Make sure to update the command with your NGC Org Name e.g. docker build -t nvcr.io/<ORG NAME>/torchtitan-dist:latest .
-docker build -t nvcr.io/xvy2tenvwbmg/torchtitan-dist:latest .
+docker build -t nvcr.io/xvy2tenvwbmg/torchtitan-dist:latest --platform linux/amd64 .
 
 ## After the container is built, run the following command to push the container to your container registry 
 docker push nvcr.io/xvy2tenvwbmg/torchtitan-dist 
