@@ -63,7 +63,7 @@ cd ~/.kube
 # Create your kubeconfig file
 touch kubeconfig
 
-# Paste the contents of your kubeconfig into the editor
+# Ask your cluster admin for your kubeconfig and paste the contents into the editor
 ctrl + v or cmd + v
 
 # Save your kubeconfig
