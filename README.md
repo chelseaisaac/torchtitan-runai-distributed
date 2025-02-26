@@ -78,9 +78,9 @@ ls
 ```
 
 ### Download the Run:ai CLI
-1. In your web browser, navigate to your Run:ai URL e.g. https://app.run.ai
+1. In your web browser, navigate to your Run:ai login page by entering your Run:ai URL e.g. https://app.run.ai
 2. Select CONTINUE WITH SSO
-3. In the top right of the Run:ai interface, click the '?' and select Researcher Command Line Interface
+3. In the top right of the Run:ai interface, click the '**?**' and select **Researcher Command Line Interface**
 4. Select your operating system
 5. Paste the **wget** command in terminal
 6. After installation, run the following command in terminal:
@@ -103,6 +103,7 @@ INFO[0248] Logged in successfully
 ```   
 
 ### Export your HuggingFace access token in your terminal:
+Read more about [HF access tokens here](https://huggingface.co/docs/hub/en/security-tokens). 
 
 ```bash
 export HF_TOKEN=<YOUR_HF_TOKEN>
@@ -133,7 +134,7 @@ colima start
 ### NGC Container Registry Setup
 If you are already familiar with Docker and have a private container registry, you may skip this section to **[Start a Multi-Node Training Run](#start-a-multi-node-training-run)** after you've pushed your pre-built container to your registry using the Dockerfile referenced above. 
 
-For this example, we leverage Nvidia's Container Registry to push and pull our pre-built containers from. 
+For this example, we leverage Nvidia's Container Registry to push and pull our pre-built containers from. Alternatively, you can use docker.io via Docker Hub.
 1. First, generate your [personal API key](https://docs.nvidia.com/ngc/gpu-cloud/ngc-private-registry-user-guide/index.html#generating-personal-api-key) from your NGC account and save it somewhere safe. You'll need it in step 2.
 2. Log into nvcr.io using your terminal
 ```bash
@@ -154,8 +155,8 @@ https://docs.docker.com/engine/reference/commandline/login/#credential-stores
 Login Succeeded
 ```
 
-## How to use the repository
-### Git clone the repository
+## Using the Repository
+### Git Clone the Repository
 
 ```bash
 # Git glone the repo
