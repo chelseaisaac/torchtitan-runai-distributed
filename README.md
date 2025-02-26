@@ -15,7 +15,7 @@ If you would like to learn more about distributed training with Run:ai, please r
 - With Tensor Parallelism (TP), individual layers of the model are split across multiple GPUs.
 You can read more about torchtitan's features [here](https://github.com/pytorch/torchtitan?tab=readme-ov-file#key-features-available).
 
-# Requirements
+## Background
 1. For this tutorial, we will use a setup consisting of two nodes, each equipped with eight GPUs. However, you can scale up by adding more nodes or GPUs to suit your specific requirements.
 
 2. Make sure you have access to a Run:ai environment with version 2.10 or a later release. (Run:ai provides a comprehensive platform for managing and scaling deep learning workloads on Kubernetes).
