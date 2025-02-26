@@ -43,8 +43,8 @@ context_parallel_degree = 1
 pipeline_parallel_degree = 1
 
 [checkpoint]
-enable_checkpoint = false
-folder = "checkpoint"
+enable_checkpoint = true
+folder = "/checkpoints"
 interval_type = "steps"
 interval = 500
 model_weights_only = false
