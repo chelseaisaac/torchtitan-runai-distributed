@@ -5,14 +5,15 @@
 </div>
 
 # Overview
-In this repo, we will show how to leverage data parallelism using torchtitan and Tensorflow on Kubernetes with Run:ai. We used this code on torchtitan. [Torchtitan](https://github.com/pytorch/torchtitan) is a repo that showcases PyTorch's latest distributed training features in a clean, minimal codebase. If you are new to torchtitan, please refer to their repo for more information. 
-
-## Background:
-- With Distributed Data Parallelism (DDP), each GPU gets a copy of the entire model and different batches of data.
-- Fully Sharded Data Parallelism (FSDP) shards both model parameters and optimizer states across GPUs/ nodes, reducing memory usage. Each GPU stores a portion of model parameters and optimizer states to save memory.
-- With Tensor Parallelism (TP), individual layers of the model are split across multiple GPUs. 
+This repository contains code we have implemented and tested to demonstrate how to effectively leverage data parallelism with torchtitan on a Kubernetes cluster utilizing Run:ai. [Torchtitan](https://github.com/pytorch/torchtitan) is a repository that highlights the latest distributed training features in PyTorch, offering a clean and minimalistic codebase. If you are new to Torchtitan, we encourage you to visit the [torchtitan GitHub repository](https://github.com/pytorch/torchtitan) for comprehensive information and resources.
 
 If you would like to learn more about distributed training with Run:ai, please refer to [this Github repo](https://github.com/EkinKarabulut/distributed_training_with_runai). 
+
+## Key torchtitan Features:
+- With Distributed Data Parallelism (DDP), each GPU gets a copy of the entire model and different batches of data.
+- Fully Sharded Data Parallelism (FSDP) shards both model parameters and optimizer states across GPUs/ nodes, reducing memory usage. Each GPU stores a portion of model parameters and optimizer states to save memory.
+- With Tensor Parallelism (TP), individual layers of the model are split across multiple GPUs.
+You can read more about torchtitan's features [here](https://github.com/pytorch/torchtitan?tab=readme-ov-file#key-features-available).
 
 # Requirements
 1. For this tutorial, we will use a setup consisting of two nodes, each equipped with eight GPUs. However, you can scale up by adding more nodes or GPUs to suit your specific requirements.
@@ -194,7 +195,7 @@ Add your [NGC Account & Personal API Key](https://docs.nvidia.com/dgx-cloud/run-
 9. Click CREATE CREDENTIALS. Your credentials will now be saved in the cluster and shall be used when you pull a container from your private registry.
 
 ### Start a Multi-Node Training Run
-Below is an example to train the Llama 3.1 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node) with the Run:ai CLI. In this example, we also pass two environment variables denoted with a '-e' flag that allows you to adjust your configuration file (.toml) to leverage [Llama 8B, 70B, or 405B](https://github.com/chelseaisaac/torchtitan-runai-distributed/tree/main/train_configs) and pass your HuggingFace Token. 
+Below is an example command to train the Llama 3.1 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node) with the Run:ai CLI. In this example, we also pass two environment variables denoted with a '-e' flag that allows you to adjust your configuration file (.toml) to leverage [Llama 8B, 70B, or 405B](https://github.com/chelseaisaac/torchtitan-runai-distributed/tree/main/train_configs) and pass your HuggingFace Token. 
 
 Note: When training the Llama 70B or 405B models using tensor parallelism, it's essential that the model's dimension (8192) is divisible by the number of nodes/shards. For the Llama 70B model, a minimum of 32 GPUs is required. During our tests with the Llama 405B model using 8 nodes (64 GPUs), we encountered an out of memory error.
 
