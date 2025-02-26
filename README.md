@@ -203,26 +203,27 @@ Note: When training the Llama 70B or 405B models using tensor parallelism, it's 
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -i nvcr.io/<ORG NAME>/torchtitan-dist \
-        -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"} \
+        -e CONFIG_FILE="./train_configs/llama3_8b.toml" \
         -e HF_TOKEN=$HF_TOKEN
 ```
 
 **Single Node (8 GPU) Example**
 ```bash
 runai submit --name torchtitan \
--i nvcr.io/<ORG NAME>/torchtitan \
--g 8 \
--e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"} \
--e HF_TOKEN=$HF_TOKEN
+        -i nvcr.io/<ORG NAME>/torchtitan \
+        -g 8 \
+        -e CONFIG_FILE="./train_configs/llama3_8b.toml" \
+        -e HF_TOKEN=$HF_TOKEN
 ```
 
 **Llama 405B Example** <br>_(Note: We've added additional environment variables to improve redundancies in the event you encounter pods restarts or throttling)_
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=15 -g 8 \
         -i nvcr.io/<ORG NAME>/torchtitan-dist \
-        -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_405b.toml"} \
+        -e CONFIG_FILE="./train_configs/llama3_405b.toml" \
         -e HF_TOKEN=$HF_TOKEN \
         -e RDZV_TIMEOUT=3600 \
+        -e MAX_RESTARTS=10 \
         -e HF_HUB_ETAG_TIMEOUT=500 \
         -e HF_HUB_DOWNLOAD_TIMEOUT=120
 ```
@@ -233,7 +234,7 @@ If you'd like to run a training job with a **Persistent Volume Claim (PVC)** att
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -i nvcr.io/<ORG NAME>/torchtitan-dist \
         --existing-pvc "claimname=<CLAIM_NAME>,path=<PATH>"  \
-        -e CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"} \
+        -e CONFIG_FILE="./train_configs/llama3_8b.toml" \
         -e HF_TOKEN=$HF_TOKEN
 ```
 
@@ -241,9 +242,9 @@ You can also verify your PVC's claim name by running the following kubectl comma
 ```bash
 kubectl get pvc
 NAME                           STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
-psa-pvc-project-12345          Bound     pvc-1387dfc8-a6d7-4cb7-894a-59d58cd91f30   10Ti       RWX            zonal-rwx      <unset>                 23d
-smcd-pvc-project-67890         Bound     pvc-6a70ec26-c9d5-4e99-94d0-54fe25211b92   10Ti       RWX            zonal-rwx      <unset>                 12d
-what-is-pv-project-57wbe       Bound     pvc-2a15ca56-bdb6-4f0a-ab37-96e4be90dec3   10Ti       RWX            zonal-rwx      <unset>                 12d
+alpha-pvc-project-12345        Bound     pvc-00000000-0000-0000-0000-000000000000   10Ti       RWX            zonal-rwx      <unset>                 23d
+beta-pvc-project-67890         Bound     pvc-00000000-0000-0000-0000-000000000000   10Ti       RWX            zonal-rwx      <unset>                 12d
+gamma-pv-project-12345         Bound     pvc-00000000-0000-0000-0000-000000000000   10Ti       RWX            zonal-rwx      <unset>                 12d
 ```
 
 ### Create a PVC in Run:ai
@@ -274,9 +275,9 @@ Using Run:ai CLI
 ```bash
 # Return list of jobs
 runai list jobs
-Showing jobs for project customer-success-engineering-test-dept
+Showing jobs for project my-project
 NAME       STATUS   AGE  NODE            IMAGE                                    TYPE     PROJECT                                 USER                   GPUs Allocated (Requested)  PODs Running (Pending)  SERVICE URL(S)
-nccl-test  Deleted  68d  -               pytorch/pytorch:latest                   Mpi      customer-success-engineering-test-dept  psarabia@nvidia.com    16.00          (16.00)      16            (0)
+nccl-test  Deleted  68d  -               pytorch/pytorch:latest                   Mpi      my-project                              user@company.com       16.00          (16.00)      16            (0)
 
 # Return logs
 runai logs nccl-test
