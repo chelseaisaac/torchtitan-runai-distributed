@@ -4,9 +4,10 @@
 
 </div>
 
-In this repo, we will show how to leverage data parallelism using torchtitan and Tensorflow on Kubernetes with Run:ai. We used this code on Torchtitan. [Torchtitan](https://github.com/pytorch/torchtitan) is a repo that showcases PyTorch's latest distributed training features in a clean, minimal codebase. If you are new to torchtitan, please refer to their repo for more information. 
+# Overview
+In this repo, we will show how to leverage data parallelism using torchtitan and Tensorflow on Kubernetes with Run:ai. We used this code on torchtitan. [Torchtitan](https://github.com/pytorch/torchtitan) is a repo that showcases PyTorch's latest distributed training features in a clean, minimal codebase. If you are new to torchtitan, please refer to their repo for more information. 
 
-<b>Background:</b>
+## Background:
 - With Distributed Data Parallelism (DDP), each GPU gets a copy of the entire model and different batches of data.
 - Fully Sharded Data Parallelism (FSDP) shards both model parameters and optimizer states across GPUs/ nodes, reducing memory usage. Each GPU stores a portion of model parameters and optimizer states to save memory.
 - With Tensor Parallelism (TP), individual layers of the model are split across multiple GPUs. 
