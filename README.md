@@ -31,10 +31,10 @@ You can read more about torchtitan's features [here](https://github.com/pytorch/
 4. Create a Hugging Face account and agree to Meta Llama 3.1 Community License agreement while signed into Hugging Face account. Generate a Hugging Face read access token in [account settings](https://huggingface.co/settings/tokens). It’s required to access the Llama3.1-8B model. (`torchtitan` currently supports training Llama 3.1 (8B, 70B, 405B) out of the box.)
 
 
-## Pre-Requisites
+# Pre-Requisites
 Note: This repo assumes you have access to a DGXC Sprint/Run:ai cluster and have [kubectl, kubeconfig, and the Run:ai CLI installed](https://docs.nvidia.com/dgx-cloud/run-ai/latest/advanced.html#accessing-the-run-ai-cli).
 
-### Install kubectl:
+## Install kubectl:
 ```bash
 # Install on macOS
 brew install kubectl
@@ -85,7 +85,7 @@ ctrl + x
 ls
 ```
 
-### Download the Run:ai CLI
+## Download the Run:ai CLI
 1. In your web browser, navigate to your Run:ai login page by entering your Run:ai URL e.g. https://app.run.ai
 2. Select CONTINUE WITH SSO
 3. In the top right of the Run:ai interface, click the '**?**' and select **Researcher Command Line Interface**
@@ -110,7 +110,7 @@ Enter verifcation code: #########
 INFO[0248] Logged in successfully
 ```   
 
-### Export your HuggingFace access token in your terminal:
+## Export your HuggingFace access token in your terminal:
 Read more about [HF access tokens here](https://huggingface.co/docs/hub/en/security-tokens). 
 
 ```bash
@@ -126,7 +126,7 @@ Your HuggingFace token will be referenced in the [run_llama_train.sh](run_llama_
 python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --local_dir=/torchtitan/datasets/tokenizer/ --hf_token=$HF_TOKEN
 ```
 
-### Install software to run containers like [Docker](https://www.docker.com/get-started/) or [Colima](https://github.com/abiosoft/colima): 
+## Install software to run containers like [Docker](https://www.docker.com/get-started/) or [Colima](https://github.com/abiosoft/colima): 
 
 ```bash
 # Install Docker
@@ -139,7 +139,7 @@ brew install colima
 colima start
 ```
 
-### NGC Container Registry Setup
+## NGC Container Registry Setup
 If you are already familiar with Docker and have a private container registry, you may skip this section to **[Start a Multi-Node Training Run](#start-a-multi-node-training-run)** after you've pushed your pre-built container to your registry using the Dockerfile referenced above. 
 
 For this example, we leverage Nvidia's Container Registry to push and pull our pre-built containers from. Alternatively, you can use docker.io via Docker Hub.
@@ -163,8 +163,8 @@ https://docs.docker.com/engine/reference/commandline/login/#credential-stores
 Login Succeeded
 ```
 
-## Using the Repository
-### Git Clone the Repository
+# Using the Repository
+## Git Clone the Repository
 
 ```bash
 # Git glone the repo
@@ -173,7 +173,7 @@ git clone https://github.com/chelseaisaac/torchtitan-runai-distributed.git
 cd torchtitan-runai-distributed/
 ```
 
-### Build Your Container
+## Build Your Container
 Leverage the [Dockerfile](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/Dockerfile) to build your container. You make adjustments as needed to support your unique environment. To kickoff the container build, adjust the docker commands below by inserting your [Organization Name located in your NGC Account's Organization Profile](https://docs.nvidia.com/ngc/gpu-cloud/ngc-user-guide/index.html#ngc-org-owner-users) (e.g. **xvy2tenvwbmg**) and run the command in your terminal:
 
 ```bash
@@ -185,7 +185,7 @@ docker build -t nvcr.io/xvy2tenvwbmg/torchtitan-dist:latest --platform linux/amd
 docker push nvcr.io/xvy2tenvwbmg/torchtitan-dist 
 ```
 
-### Create a NGC Credential in Run:ai
+## Create a NGC Credential in Run:ai
 Add your [NGC Account & Personal API Key](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#credentials) as a Run:ai Credential to pull containers from nvcr.io 
 
 <img width="503" alt="Screenshot 2025-02-25 at 8 50 57 AM" src="https://github.com/user-attachments/assets/362465f1-39fd-4e85-b3f9-d6057f747ac6" /><br>
@@ -200,7 +200,7 @@ Add your [NGC Account & Personal API Key](https://docs.nvidia.com/dgx-cloud/run-
 8. Under Docker Registry URL, enter nvcr.io.
 9. Click CREATE CREDENTIALS. Your credentials will now be saved in the cluster and shall be used when you pull a container from your private registry.
 
-### Start a Multi-Node Training Run
+## Start a Multi-Node Training Run
 Below is an example command to train the Llama 3.1 8B model on 16 GPUs (2 nodes = 1 primary + 1 worker, 8 GPUs per node) with the Run:ai CLI. In this example, we also pass two environment variables denoted with a '-e' flag that allows you to adjust your configuration file (.toml) to leverage [Llama 8B, 70B, or 405B](https://github.com/chelseaisaac/torchtitan-runai-distributed/tree/main/train_configs) and pass your HuggingFace Token. 
 
 Note: When training the Llama 70B or 405B models using tensor parallelism, it's essential that the model's dimension (8192) is divisible by the number of nodes/shards. For the Llama 70B model, a minimum of 32 GPUs is required. During our tests with the Llama 405B model using 8 nodes (64 GPUs), we encountered an out of memory error.
@@ -253,7 +253,7 @@ beta-pvc-project-67890         Bound     pvc-00000000-0000-0000-0000-00000000000
 gamma-pv-project-12345         Bound     pvc-00000000-0000-0000-0000-000000000000   10Ti       RWX            zonal-rwx      <unset>                 12d
 ```
 
-### Create a PVC in Run:ai
+## Create a PVC in Run:ai
 A Persistent Volume Claim (PVC) is a request for dedicated storage that allows your data to persist beyond the lifecycle of a pod. It ensures that the data remains accessible to containers even after the pod is terminated. To learn more about PVC's and how to set them up, read the [Run:ai on DGX Cloud Guide](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#pvc). 
 
 <img width="373" alt="Screenshot 2025-02-25 at 10 08 01 AM" src="https://github.com/user-attachments/assets/2111fb2a-3565-4276-8702-9c18abdc635f" />
@@ -269,14 +269,14 @@ A Persistent Volume Claim (PVC) is a request for dedicated storage that allows y
 9. (Optional) In the Restrictions pane, you can use the toggle switch to make the storage read-only if desired.
 10. Click CREATE DATA SOURCE. You will be taken to the Data sources overview page, where you can view your new PVC data source.
 
-### Upon Pod Initialization
+## Upon Pod Initialization
 The script [run_llama_train.sh](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/sarabiap-patch-3/run_llama_train.sh) will execute on start up. 
 
 
 
-### View Logs
+# View Logs
 
-Using Run:ai CLI
+## Using Run:ai CLI
 
 ```bash
 # Return list of jobs
@@ -290,7 +290,7 @@ runai logs nccl-test
 <Your Logs Here>         
 ```
 
-Using kubectl
+## Using kubectl
 
 ```bash
 # Return list of pods
@@ -312,9 +312,63 @@ Copyright (c) 2014-2024 Facebook Inc.
 .....................................
 ```
 
-View the logs in the UI
+## View Logs in UI
 
 <img width="2480" alt="Screenshot 2025-02-25 at 11 17 43 AM" src="https://github.com/user-attachments/assets/3ab3ee78-b6dd-48ef-b026-577d9748c204" />
+
+## Tensorboard
+
+### Update toml Config File
+
+```bash
+# Update [metrics]
+[metrics]
+log_freq = 10
+enable_tensorboard = true
+save_tb_folder = "tb"
+enable_wandb = false
+```
+
+### Portforward Container
+```bash
+# In a new terminal window, run
+runai port-forward distributed-training-pytorch --port 8888:8888
+
+# You should see the following output
+open access point(s) to service from localhost:8888
+Forwarding from 127.0.0.1:8888 -> 8888
+Forwarding from [::1]:8888 -> 8888
+Handling connection for 8888 -- accessed http://localhost:8888 via browser
+```
+
+### Tensorboard Logs
+Tensorboard logging shall be saved in ```./outputs/tb/<filename>```. Verify the exact directory by viewing your logs. Save this path for later.
+
+```bash
+[rank0]:[titan] 2025-02-27 19:35:04,661 - root - INFO - TensorBoard logging enabled. Logs will be saved at ./outputs/tb/20250227-1935
+```
+
+### Launch Tensorboard
+```bash
+# SSH into the container
+runai bash distributed-training-pytorch
+
+# Launch Tensorboard
+tensorboard --logdir=./outputs/tb/20250227-1935 --port=8888
+..................................................................
+..................................................................
+NOTE: Using experimental fast data loading logic. To disable, pass
+    "--load_fast=false" and report issues on GitHub. More details:
+    https://github.com/tensorflow/tensorboard/issues/4784
+
+# Copy the URL below into your browser to launch the UI
+Serving TensorBoard on localhost; to expose to the network, use a proxy or pass --bind_all
+TensorBoard 2.18.0 at http://localhost:8888/ (Press CTRL+C to quit)
+```
+![Screenshot 2025-02-27 at 11 53 28 AM](https://github.com/user-attachments/assets/ba399390-e6de-4d13-af12-82ec741648fa)
+
+## Weights & Biases
+[Under Construction]
 
 # To-Do List & Updates to torchtitan Repository 
 - Test with Llama 3 8B — Completed
