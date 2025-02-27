@@ -6,10 +6,15 @@
 
 # Table of Contents
 [Overview](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/README.md#overview)
+
 [Key torchtitan Features](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/README.md#key-torchtitan-features)
+
 [Background](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/README.md#background)
+
 [Pre-Requisites](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/README.md#pre-requisites)
+
 [Using the Repository](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/README.md#using-the-repository)
+
 [To-Do List & Updates to torchtitan Repository](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/README.md#updates--to-do-list)
 
 # Overview
