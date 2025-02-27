@@ -43,7 +43,7 @@ nano ~/.zshrc
 # Append the following on a new line in the file
 alias k='kubectl'
 
-# Save your kubeconfig
+# Save your shell configuration file
 ctrl + o
 Enter
 
