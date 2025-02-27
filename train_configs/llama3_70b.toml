@@ -9,11 +9,14 @@ description = "Llama 3 70B training"
 enable_profiling = true
 save_traces_folder = "profile_trace"
 profile_freq = 100
+enable_memory_snapshot = false
+save_memory_snapshot_folder = "memory_snapshot"
 
 [metrics]
 log_freq = 10
 enable_tensorboard = true
 save_tb_folder = "tb"
+enable_wandb = false
 
 [model]
 name = "llama3"
@@ -44,7 +47,7 @@ pipeline_parallel_degree = 1
 
 [checkpoint]
 enable_checkpoint = true
-folder = "/checkpoints"
+folder = "/checkpoints"    # verify configuration of pvc mount path
 interval_type = "steps"
 interval = 500
 model_weights_only = false
