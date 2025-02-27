@@ -4,6 +4,14 @@
 
 </div>
 
+# Table of Contents
+[Overview](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/README.md#overview)
+[Key torchtitan Features](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/README.md#key-torchtitan-features)
+[Background](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/README.md#background)
+[Pre-Requisites](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/README.md#pre-requisites)
+[Using the Repository](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/README.md#using-the-repository)
+[To-Do List & Updates to torchtitan Repository](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/main/README.md#updates--to-do-list)
+
 # Overview
 This repository contains code we have implemented and tested to demonstrate how to effectively leverage data parallelism with torchtitan on a Kubernetes cluster utilizing Run:ai. [Torchtitan](https://github.com/pytorch/torchtitan) is a repository that highlights the latest distributed training features in PyTorch, offering a clean and minimalistic codebase. If you are new to Torchtitan, we encourage you to visit the [torchtitan GitHub repository](https://github.com/pytorch/torchtitan) for comprehensive information and resources.
 
@@ -310,7 +318,7 @@ View the logs in the UI
 
 <img width="2480" alt="Screenshot 2025-02-25 at 11 17 43 AM" src="https://github.com/user-attachments/assets/3ab3ee78-b6dd-48ef-b026-577d9748c204" />
 
-# Updates & To-Do List
+# To-Do List & Updates to torchtitan Repository 
 - Test with Llama 3 8B — Completed
 - Test with Llama 3 70B — Completed
 - Test with Llama 3 405b — In-Progress (Note: Need **at least 16 nodes** or more)
