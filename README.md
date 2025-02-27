@@ -234,7 +234,7 @@ runai submit-dist pytorch --name distributed-training-pytorch --workers=15 -g 8 
         -e HF_HUB_DOWNLOAD_TIMEOUT=120
 ```
 
-**Upon Pod Initialization** <br>_The script [run_llama_train.sh](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/sarabiap-patch-3/run_llama_train.sh) will execute on start up.
+**Upon Pod Initialization** <br>The script [run_llama_train.sh](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/sarabiap-patch-3/run_llama_train.sh) will execute on start up.
 
 ![Screenshot 2025-02-27 at 2 06 07 PM](https://github.com/user-attachments/assets/5f92c87b-cd1b-4ea4-97dc-41d2098ee2a6)
 
