@@ -234,6 +234,25 @@ runai submit-dist pytorch --name distributed-training-pytorch --workers=15 -g 8 
         -e HF_HUB_DOWNLOAD_TIMEOUT=120
 ```
 
+## Upon Pod Initialization
+The script [run_llama_train.sh](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/sarabiap-patch-3/run_llama_train.sh) will execute on start up. 
+
+## Create a Persistent Volume Claim (PVC) in Run:ai
+A Persistent Volume Claim (PVC) is a request for dedicated storage that allows your data to persist beyond the lifecycle of a pod. It ensures that the data remains accessible to containers even after the pod is terminated. To learn more about PVC's and how to set them up, read the [Run:ai on DGX Cloud Guide](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#pvc). 
+
+<img width="373" alt="Screenshot 2025-02-25 at 10 08 01 AM" src="https://github.com/user-attachments/assets/2111fb2a-3565-4276-8702-9c18abdc635f" />
+
+1. After selecting PVC, you will be taken to the New data source creation page.
+2. Set a Scope for the PVC, and enter a name and description.
+3. Fill out the Data mount section of the form:
+4. Select a Storage class. Be sure to review the [DGX Cloud recommended storage classes](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#user-guide-recommended-storage-classes).
+5. Select the access mode configuration for the PVC - either read/write by one node, read only by many nodes, or read/write by many nodes.
+6. Specify a claim size to ensure a minimum capacity for the PVC.
+7. Choose the Filesystem option as the Volume mode (Block is unsupported).
+8. Specify a Container path to define what path the PVC will be accessible from in a running job.
+9. (Optional) In the Restrictions pane, you can use the toggle switch to make the storage read-only if desired.
+10. Click CREATE DATA SOURCE. You will be taken to the Data sources overview page, where you can view your new PVC data source.
+
 **Persistent Volume Claim Example**<br>
 If you'd like to run a training job with a **Persistent Volume Claim (PVC)** attached, you need to add the _--existing-pvc_ argument along with the pvc name and pvc mount path:
 ```bash
@@ -252,27 +271,6 @@ alpha-pvc-project-12345        Bound     pvc-00000000-0000-0000-0000-00000000000
 beta-pvc-project-67890         Bound     pvc-00000000-0000-0000-0000-000000000000   10Ti       RWX            zonal-rwx      <unset>                 12d
 gamma-pv-project-12345         Bound     pvc-00000000-0000-0000-0000-000000000000   10Ti       RWX            zonal-rwx      <unset>                 12d
 ```
-
-## Create a PVC in Run:ai
-A Persistent Volume Claim (PVC) is a request for dedicated storage that allows your data to persist beyond the lifecycle of a pod. It ensures that the data remains accessible to containers even after the pod is terminated. To learn more about PVC's and how to set them up, read the [Run:ai on DGX Cloud Guide](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#pvc). 
-
-<img width="373" alt="Screenshot 2025-02-25 at 10 08 01 AM" src="https://github.com/user-attachments/assets/2111fb2a-3565-4276-8702-9c18abdc635f" />
-
-1. After selecting PVC, you will be taken to the New data source creation page.
-2. Set a Scope for the PVC, and enter a name and description.
-3. Fill out the Data mount section of the form:
-4. Select a Storage class. Be sure to review the [DGX Cloud recommended storage classes](https://docs.nvidia.com/dgx-cloud/run-ai/latest/user-guide.html#user-guide-recommended-storage-classes).
-5. Select the access mode configuration for the PVC - either read/write by one node, read only by many nodes, or read/write by many nodes.
-6. Specify a claim size to ensure a minimum capacity for the PVC.
-7. Choose the Filesystem option as the Volume mode (Block is unsupported).
-8. Specify a Container path to define what path the PVC will be accessible from in a running job.
-9. (Optional) In the Restrictions pane, you can use the toggle switch to make the storage read-only if desired.
-10. Click CREATE DATA SOURCE. You will be taken to the Data sources overview page, where you can view your new PVC data source.
-
-## Upon Pod Initialization
-The script [run_llama_train.sh](https://github.com/chelseaisaac/torchtitan-runai-distributed/blob/sarabiap-patch-3/run_llama_train.sh) will execute on start up. 
-
-
 
 # View Logs
 
