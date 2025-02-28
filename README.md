@@ -110,8 +110,8 @@ Enter verifcation code: #########
 INFO[0248] Logged in successfully
 ```   
 
-## Export your HuggingFace access token in your terminal:
-Read more about [HF access tokens here](https://huggingface.co/docs/hub/en/security-tokens). 
+**(Optional) Export your HuggingFace access token in your terminal:
+**This step is no longer necessary as we've already downloaded the llama tokenizer for you. Read more about [HF access tokens here](https://huggingface.co/docs/hub/en/security-tokens). 
 
 ```bash
 export HF_TOKEN=<YOUR_HF_TOKEN>
@@ -119,11 +119,11 @@ echo $HF_TOKEN
 YOUR_HF_TOKEN
 ```
 
-Your HuggingFace token will be referenced in the [run_llama_train.sh](run_llama_train.sh) script to download the Llama Tokenizer:
+Your HuggingFace token can be referenced in the [run_llama_train.sh](run_llama_train.sh) script to download the Llama Tokenizer:
 
 ```bash
-# Be sure to export your huggingface token via terminal e.g. export HF_TOKEN=<your HF Token> 
-python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --local_dir=/torchtitan/datasets/tokenizer/ --hf_token=$HF_TOKEN
+# Uncomment the python command below to download assets from the Meta's HuggingFace repository
+# python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --local_dir=/torchtitan/datasets/tokenizer/ --hf_token=$HF_TOKEN
 ```
 
 ## Install software to run containers like [Docker](https://www.docker.com/get-started/) or [Colima](https://github.com/abiosoft/colima): 
