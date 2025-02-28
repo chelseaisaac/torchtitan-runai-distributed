@@ -320,12 +320,20 @@ def main(job_config: JobConfig):
                     del pred
                     loss.backward()
 
-            # optimizer step
+            # Clip Gradients
+            #utils.clip_grad_norm_(
+            #    [p for m in model_parts for p in m.parameters()],
+            #    job_config.training.max_norm,
+            #    foreach=True,
+            #    pp_mesh=pp_mesh if parallel_dims.pp_enabled else None,
+            #)
+            
+            # Optimizer Step
             checkpoint.maybe_wait_for_staging()
             optimizers.step()
             lr_schedulers.step()
 
-            # log metrics
+            # Log Metrics
             if (
                 train_state.step == 1
                 or train_state.step % job_config.metrics.log_freq == 0
