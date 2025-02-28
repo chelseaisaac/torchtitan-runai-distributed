@@ -370,6 +370,58 @@ TensorBoard 2.18.0 at http://localhost:8888/ (Press CTRL+C to quit)
 ## Weights & Biases
 [Under Construction]
 
+## Nsight Systems
+NVIDIA Nsight™ Systems is a system-wide performance analysis tool designed to visualize an application’s algorithms, identify the largest opportunities to optimize, and tune to scale efficiently across any quantity or size of CPUs and GPUs, from large servers to our smallest systems-on-a-chip (SoCs). If you are using the DockerFile from this repo, Nsight Systems will already be preloaded in the container. Read more about Nsight Systems [here](https://developer.nvidia.com/nsight-systems).
+
+nsys allows for various interactive CLI command sequences to trigger data collection. For example:
+
+**Run application, begin collection manually, stop run manually** 
+(Note: You may want to introduce a delay to bypass the warm up period) 
+
+```bash
+# Include the Nsight Systems launch command within your script
+nsys launch \
+torchrun --nproc_per_node=................
+
+# SSH into your container
+runai bash <job_nam>
+
+# Go to your desired directory. If you want to save the output file, go to your PVC.
+cd
+cd </desired_directory>
+
+# Manually kick-off data collection
+nsys start
+
+# Manually stop data collection
+nsys stop
+Generating '/tmp/nsys-report.qdstrm'
+[1/1] [========================100%] report.nsys-rep
+Generated:
+    </desired_directory>/report.nsys-rep
+
+# Generate the results of the report
+nsys stats report.nsys-rep
+Generating SQLite file report2.sqlite from report.nsys-rep
+
+** CUDA API Summary (cuda_api_sum):
+
+ Time (%)  Total Time (ns)  Num Calls   Avg (ns)     Med (ns)    Min (ns)  Max (ns)   StdDev (ns)                 Name               
+ --------  ---------------  ---------  -----------  -----------  --------  ---------  -----------  ----------------------------------
+     ##.#      ###########      #####     ######.#      #####.#      ####   ########    #######.#  cudaKernel                
+
+```
+
+**Profile a Python script that uses CUDA**
+(Note: This example launches a Python script and starts profiling 60 seconds after the launch, tracing CUDA, cuDNN, cuBLAS, OS runtime APIs, and NVTX as well as collecting thread schedule information.)
+```bash
+# Include the Nsight Systems launch command with in your script
+nsys profile --trace=cuda,cudnn,cublas,osrt,nvtx
+    --delay=60 python my_dnn_script.py
+```
+
+To read more, go to the [Nsight Systems User Guide](https://docs.nvidia.com/nsight-systems/UserGuide/index.html).
+
 # To-Do List & Updates to torchtitan Repository 
 - Test with Llama 3 8B — Completed
 - Test with Llama 3 70B — Completed
