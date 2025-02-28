@@ -110,22 +110,6 @@ Enter verifcation code: #########
 INFO[0248] Logged in successfully
 ```   
 
-**(Optional) Export your HuggingFace access token in your terminal:
-**This step is no longer necessary as we've already downloaded the llama tokenizer for you. Read more about [HF access tokens here](https://huggingface.co/docs/hub/en/security-tokens). 
-
-```bash
-export HF_TOKEN=<YOUR_HF_TOKEN>
-echo $HF_TOKEN
-YOUR_HF_TOKEN
-```
-
-Your HuggingFace token can be referenced in the [run_llama_train.sh](run_llama_train.sh) script to download the Llama Tokenizer:
-
-```bash
-# Uncomment the python command below to download assets from the Meta's HuggingFace repository
-# python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --local_dir=/torchtitan/datasets/tokenizer/ --hf_token=$HF_TOKEN
-```
-
 ## Install software to run containers like [Docker](https://www.docker.com/get-started/) or [Colima](https://github.com/abiosoft/colima): 
 
 ```bash
@@ -138,6 +122,9 @@ brew install colima
 # Start the Colima VM
 colima start
 ```
+
+## Download the Llama Tokenizer
+We've included the tokenizer.model in this repository so you don't have to download it from HuggingFace. See the Deprecated Section at the end of the repo.  
 
 ## NGC Container Registry Setup
 If you are already familiar with Docker and have a private container registry, you may skip this section to **[Start a Multi-Node Training Run](#start-a-multi-node-training-run)** after you've pushed your pre-built container to your registry using the Dockerfile referenced above. 
@@ -209,8 +196,7 @@ Note: When training the Llama 70B or 405B models using tensor parallelism, it's 
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -i nvcr.io/<ORG NAME>/torchtitan-dist \
-        -e CONFIG_FILE="./train_configs/llama3_8b.toml" \
-        -e HF_TOKEN=$HF_TOKEN
+        -e CONFIG_FILE="./train_configs/llama3_8b.toml"
 ```
 
 **Single Node (8 GPU) Example**
@@ -218,8 +204,7 @@ runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
 runai submit --name torchtitan \
         -i nvcr.io/<ORG NAME>/torchtitan \
         -g 8 \
-        -e CONFIG_FILE="./train_configs/llama3_8b.toml" \
-        -e HF_TOKEN=$HF_TOKEN
+        -e CONFIG_FILE="./train_configs/llama3_8b.toml"
 ```
 
 **Llama 405B Example** <br>_(Note: We've added additional environment variables to improve redundancies in the event you encounter pods restarts or throttling)_
@@ -227,7 +212,6 @@ runai submit --name torchtitan \
 runai submit-dist pytorch --name distributed-training-pytorch --workers=15 -g 8 \
         -i nvcr.io/<ORG NAME>/torchtitan-dist \
         -e CONFIG_FILE="./train_configs/llama3_405b.toml" \
-        -e HF_TOKEN=$HF_TOKEN \
         -e RDZV_TIMEOUT=3600 \
         -e MAX_RESTARTS=10 \
         -e HF_HUB_ETAG_TIMEOUT=500 \
@@ -261,8 +245,7 @@ If you'd like to run a training job with a **Persistent Volume Claim (PVC)** att
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -i nvcr.io/<ORG NAME>/torchtitan-dist \
         --existing-pvc "claimname=<CLAIM_NAME>,path=<PATH>"  \
-        -e CONFIG_FILE="./train_configs/llama3_8b.toml" \
-        -e HF_TOKEN=$HF_TOKEN
+        -e CONFIG_FILE="./train_configs/llama3_8b.toml"
 ```
 
 You can also verify your PVC's claim name by running the following kubectl command:
@@ -434,3 +417,21 @@ The training scripts presented are slightly modified versions of the example scr
 * [torchtitan/utils.py](torchtitan/utils.py) - Updated seed to be within 32-bit range. The original seed was too large and triggered a runtime error in our environment (DGX Cloud on AWS).
 * [torchtitan/train_spec.py](torchtitan/train_spec.py) - Added loss_fn function
 * [train.py](train.py) - Changed the labels in train.py. Reshaped the predictions before calculating the loss.
+
+# Deprecated Section(s)
+
+## Export HuggingFace Token
+To read more about [HF access tokens, go here](https://huggingface.co/docs/hub/en/security-tokens). 
+
+```bash
+export HF_TOKEN=<YOUR_HF_TOKEN>
+echo $HF_TOKEN
+YOUR_HF_TOKEN
+```
+
+Your HuggingFace token will be referenced in the [run_llama_train.sh](run_llama_train.sh) script to download the Llama Tokenizer:
+
+```bash
+# Be sure to export your huggingface token via terminal e.g. export HF_TOKEN=<your HF Token> 
+python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --local_dir=/torchtitan/datasets/tokenizer/ --hf_token=$HF_TOKEN
+```
