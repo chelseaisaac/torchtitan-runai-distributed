@@ -321,12 +321,12 @@ def main(job_config: JobConfig):
                     loss.backward()
 
             # Clip Gradients
-            #utils.clip_grad_norm_(
-            #    [p for m in model_parts for p in m.parameters()],
-            #    job_config.training.max_norm,
-            #    foreach=True,
-            #    pp_mesh=pp_mesh if parallel_dims.pp_enabled else None,
-            #)
+            utils.clip_grad_norm_(
+                [p for m in model_parts for p in m.parameters()],
+                job_config.training.max_norm,
+                foreach=True,
+                pp_mesh=pp_mesh if parallel_dims.pp_enabled else None,
+            )
             
             # Optimizer Step
             checkpoint.maybe_wait_for_staging()
