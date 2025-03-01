@@ -396,11 +396,20 @@ Generating SQLite file report2.sqlite from report.nsys-rep
 ```
 
 **Profile a Python script that uses CUDA**
-(Note: This example launches a Python script and starts profiling 60 seconds after the launch, tracing CUDA, cuDNN, cuBLAS, OS runtime APIs, and NVTX as well as collecting thread schedule information.)
+(Note: This example launches a Python script and starts profiling 60 seconds after the launch, tracing CUDA, cuDNN, cuBLAS, OS runtime APIs, and NVTX. Do not collect CPU sampling information or thread scheduling information. Profile any child processes. Generate the output file as <my_file>.nsys-rep in the current working directory.)
 ```bash
 # Include the Nsight Systems launch command with in your script
-nsys profile --trace=cuda,cudnn,cublas,osrt,nvtx
-    --delay=60 python my_dnn_script.py
+nsys profile --trace=cuda,cudnn,cublas,osrt,nvtx \
+--delay=60 --sample=none --cpuctxsw=none -o <my_file> \
+python train.py
+```
+
+**Run Application, Start / Stop Collection using cudaProfilerStart/Stop**
+(Note: Create interactive CLI process and set it up to begin collecting as soon as a cudaProfileStart() is detected. Launch application for default analysis, sending application output to the terminal. Stop collection at next call to cudaProfilerStop, when the user calls nsys stop, or when the root process terminates. Generate the report#.nsys-rep in the default location.)
+```bash
+# Include the Nsight Systems launch command with in your script
+nsys start -c cudaProfilerApi
+nsys launch -w true <application> [application-arguments]
 ```
 
 To read more, go to the [Nsight Systems User Guide](https://docs.nvidia.com/nsight-systems/UserGuide/index.html).
