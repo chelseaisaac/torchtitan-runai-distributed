@@ -338,7 +338,6 @@ runai port-forward distributed-training-pytorch --port 8888:8888
 open access point(s) to service from localhost:8888
 Forwarding from 127.0.0.1:8888 -> 8888
 Forwarding from [::1]:8888 -> 8888
-Handling connection for 8888 -- accessed http://localhost:8888 via browser
 ```
 
 ### Tensorboard Logs
@@ -364,6 +363,11 @@ NOTE: Using experimental fast data loading logic. To disable, pass
 # Copy the URL below into your browser to launch the UI
 Serving TensorBoard on localhost; to expose to the network, use a proxy or pass --bind_all
 TensorBoard 2.18.0 at http://localhost:8888/ (Press CTRL+C to quit)
+
+# Your other terminal will display
+Handling connection for 8888 -- accessed http://localhost:8888 via browser
+Handling connection for 8888
+Handling connection for 8888
 ```
 ![Screenshot 2025-02-27 at 11 53 28 AM](https://github.com/user-attachments/assets/ba399390-e6de-4d13-af12-82ec741648fa)
 
