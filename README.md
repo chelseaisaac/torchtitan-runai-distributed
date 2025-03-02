@@ -315,7 +315,7 @@ enable_wandb = false
 ### Portforward Container
 ```bash
 # In a new terminal window, run
-runai port-forward distributed-training-pytorch --port 8888:8888
+runai port-forward distributed-training-pytorch --port 8888:8888 OR kubectl port-forward pod/<pod-name> <local-port>:<pod-port>
 
 # You should see the following output
 open access point(s) to service from localhost:8888
