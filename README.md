@@ -135,10 +135,10 @@ For this example, we leverage Nvidia's Container Registry to push and pull our p
         Key Name <br>
         Expiration <br>
         Services Included: <br> 
-                Secrets Manager <br>
-                NGC Catalog <br>
-                Private Registry <br>
-                Cloud Functions <br>
+        Secrets Manager <br>
+        NGC Catalog <br>
+        Private Registry <br>
+        Cloud Functions <br>
 
 Click **Generate Personal Key** and save it somewhere safe. You'll need it in the following step.
 2. Log into nvcr.io using your terminal
