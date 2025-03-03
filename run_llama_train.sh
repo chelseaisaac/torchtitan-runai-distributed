@@ -7,8 +7,6 @@
 
 set -ex
 
-# Be sure to export your huggingface token via terminal e.g. export HF_TOKEN=<your HF Token> 
-python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --local_dir=/torchtitan/datasets/tokenizer/ --hf_token=$HF_TOKEN
 export NCCL_DEBUG=INFO
 export NCCL_IGNORE_CPU_AFFINITY=1
 
@@ -22,14 +20,12 @@ else
     job_n=$OVERRIDE_PET_NNODES
 fi
 
-# use envs as local overrides for convenience
-# e.g.
+# Use envs as local overrides for convenience e.g.
 # LOG_RANK=0,1 NGPU=4 ./run_llama_train.sh
 NGPU=${NGPU:-"8"}
 LOG_RANK=${LOG_RANK:-0}
 RDZV_TIMEOUT=${RDZV_TIMEOUT:-"600"}
 MAX_RESTARTS=${MAX_RESTARTS:-1}
-# CONFIG_FILE=${CONFIG_FILE:-"./train_configs/llama3_8b.toml"}
 
 overrides=""
 if [ $# -ne 0 ]; then
@@ -37,6 +33,8 @@ if [ $# -ne 0 ]; then
 fi
 
 PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True" \
-torchrun --nproc_per_node=${NGPU} --nnodes=${job_n} --max-restarts ${MAX_RESTARTS} --rdzv_backend c10d --rdzv_conf timeout=${RDZV_TIMEOUT} --rdzv_endpoint=${master_addr}:${master_port} \
+torchrun --nproc_per_node=${NGPU} --nnodes=${job_n} \
+--max-restarts ${MAX_RESTARTS} --rdzv_backend c10d \
+--rdzv_conf timeout=${RDZV_TIMEOUT} --rdzv_endpoint=${master_addr}:${master_port} \
 --local-ranks-filter ${LOG_RANK} --role rank --tee 3 \
 train.py --job.config_file ${CONFIG_FILE} $overrides

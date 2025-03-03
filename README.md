@@ -110,22 +110,6 @@ Enter verifcation code: #########
 INFO[0248] Logged in successfully
 ```   
 
-## Export your HuggingFace access token in your terminal:
-Read more about [HF access tokens here](https://huggingface.co/docs/hub/en/security-tokens). 
-
-```bash
-export HF_TOKEN=<YOUR_HF_TOKEN>
-echo $HF_TOKEN
-YOUR_HF_TOKEN
-```
-
-Your HuggingFace token will be referenced in the [run_llama_train.sh](run_llama_train.sh) script to download the Llama Tokenizer:
-
-```bash
-# Be sure to export your huggingface token via terminal e.g. export HF_TOKEN=<your HF Token> 
-python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --local_dir=/torchtitan/datasets/tokenizer/ --hf_token=$HF_TOKEN
-```
-
 ## Install software to run containers like [Docker](https://www.docker.com/get-started/) or [Colima](https://github.com/abiosoft/colima): 
 
 ```bash
@@ -139,11 +123,24 @@ brew install colima
 colima start
 ```
 
-## NGC Container Registry Setup
+## Download the Llama Tokenizer
+We've included the tokenizer.model in this repository so you don't have to download it from HuggingFace. See the Deprecated Section at the end of the repo.  
+
+## Nvidia GPU Cloud (NGC) Setup
 If you are already familiar with Docker and have a private container registry, you may skip this section to **[Start a Multi-Node Training Run](#start-a-multi-node-training-run)** after you've pushed your pre-built container to your registry using the Dockerfile referenced above. 
 
+### Generate Personal Key
 For this example, we leverage Nvidia's Container Registry to push and pull our pre-built containers from. Alternatively, you can use docker.io via Docker Hub.
-1. First, generate your [personal API key](https://docs.nvidia.com/ngc/gpu-cloud/ngc-private-registry-user-guide/index.html#generating-personal-api-key) from your NGC account and save it somewhere safe. You'll need it in step 2.
+1. First, generate your [personal API key](https://docs.nvidia.com/ngc/gpu-cloud/ngc-private-registry-user-guide/index.html#generating-personal-api-key) from your NGC account. Enter the following fields: <br>
+        Key Name <br>
+        Expiration <br>
+        Services Included: <br> 
+        Secrets Manager <br>
+        NGC Catalog <br>
+        Private Registry <br>
+        Cloud Functions <br>
+
+Click **Generate Personal Key** and save it somewhere safe. You'll need it in the following step. <br><br>
 2. Log into nvcr.io using your terminal
 ```bash
 # Run the following docker command to start the login process to nvcr.io
@@ -161,6 +158,39 @@ Configure a credential helper to remove this warning. See
 https://docs.docker.com/engine/reference/commandline/login/#credential-stores
 
 Login Succeeded
+```
+### Install the NGC CLI
+The NGC CLI installation instructions can be found [here](https://org.ngc.nvidia.com/setup/installers/cli).
+
+```bash
+## Download the CLI package based on your operating system
+## For example, ARM64 MacOs
+curl -LO https://api.ngc.nvidia.com/v2/resources/nvidia/ngc-apps/ngc_cli/versions/3.60.2/files/ngccli_mac_arm.pkg
+
+## Check the installer's SHA256 hash to ensure the file wasn't corrupted during download
+shasum -a 256 ngccli_mac_arm.pkg
+
+## Verify the output of the SHA256 checksum
+c3733a4f8974a28b486a965be31e1ae7f1c7b6af68b10a2490766b5a17cca498
+
+## Run the installer
+sudo installer -pkg ngccli_mac_arm.pkg -target /usr/local
+
+## Configure your NGC CLI config
+ngc config set
+
+## You'll be prompted to enter the following details:
+Enter API key [********]. Choices: [<VALID_APIKEY>, 'no-apikey']: <Enter Personal API Key>
+Enter CLI output format type [ascii]. Choices: ['ascii', 'csv', 'json']: <Enter CLI output format>
+Enter org [###########]. Choices: ['[###########']: <Enter Unique Org ID>
+Enter team [no-team]. Choices: ['no-team']: <enter no-team or team unless you have this configured>
+Enter ace [no-ace]. Choices: ['no-ace']: <enter no-ace unless you this configured>
+
+## Output results upon completing configuration
+Validating configuration...
+Successfully validated configuration.
+Saving configuration...
+Successfully saved NGC configuration to ~/username/.ngc/config
 ```
 
 # Using the Repository
@@ -209,8 +239,7 @@ Note: When training the Llama 70B or 405B models using tensor parallelism, it's 
 ```bash
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -i nvcr.io/<ORG NAME>/torchtitan-dist \
-        -e CONFIG_FILE="./train_configs/llama3_8b.toml" \
-        -e HF_TOKEN=$HF_TOKEN
+        -e CONFIG_FILE="./train_configs/llama3_8b.toml"
 ```
 
 **Single Node (8 GPU) Example**
@@ -218,8 +247,7 @@ runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
 runai submit --name torchtitan \
         -i nvcr.io/<ORG NAME>/torchtitan \
         -g 8 \
-        -e CONFIG_FILE="./train_configs/llama3_8b.toml" \
-        -e HF_TOKEN=$HF_TOKEN
+        -e CONFIG_FILE="./train_configs/llama3_8b.toml"
 ```
 
 **Llama 405B Example** <br>_(Note: We've added additional environment variables to improve redundancies in the event you encounter pods restarts or throttling)_
@@ -227,7 +255,6 @@ runai submit --name torchtitan \
 runai submit-dist pytorch --name distributed-training-pytorch --workers=15 -g 8 \
         -i nvcr.io/<ORG NAME>/torchtitan-dist \
         -e CONFIG_FILE="./train_configs/llama3_405b.toml" \
-        -e HF_TOKEN=$HF_TOKEN \
         -e RDZV_TIMEOUT=3600 \
         -e MAX_RESTARTS=10 \
         -e HF_HUB_ETAG_TIMEOUT=500 \
@@ -261,8 +288,7 @@ If you'd like to run a training job with a **Persistent Volume Claim (PVC)** att
 runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
         -i nvcr.io/<ORG NAME>/torchtitan-dist \
         --existing-pvc "claimname=<CLAIM_NAME>,path=<PATH>"  \
-        -e CONFIG_FILE="./train_configs/llama3_8b.toml" \
-        -e HF_TOKEN=$HF_TOKEN
+        -e CONFIG_FILE="./train_configs/llama3_8b.toml"
 ```
 
 You can also verify your PVC's claim name by running the following kubectl command:
@@ -332,7 +358,7 @@ enable_wandb = false
 ### Portforward Container
 ```bash
 # In a new terminal window, run
-runai port-forward distributed-training-pytorch --port 8888:8888
+runai port-forward distributed-training-pytorch --port 8888:8888 OR kubectl port-forward pod/<pod-name> <local-port>:<pod-port>
 
 # You should see the following output
 open access point(s) to service from localhost:8888
@@ -374,6 +400,67 @@ Handling connection for 8888
 ## Weights & Biases
 [Under Construction]
 
+## Nsight Systems
+NVIDIA Nsight™ Systems is a system-wide performance analysis tool designed to visualize an application’s algorithms, identify the largest opportunities to optimize, and tune to scale efficiently across any quantity or size of CPUs and GPUs, from large servers to our smallest systems-on-a-chip (SoCs). If you are using the DockerFile from this repo, Nsight Systems will already be preloaded in the container. Read more about Nsight Systems [here](https://developer.nvidia.com/nsight-systems).
+
+nsys allows for various interactive CLI command sequences to trigger data collection. For example:
+
+**Run application, begin collection manually, stop run manually** 
+(Note: You may want to introduce a delay to bypass the warm up period) 
+
+```bash
+# Include the Nsight Systems launch command within your script
+nsys launch \
+torchrun --nproc_per_node=................
+
+# SSH into your container
+runai bash <job_nam>
+
+# Go to your desired directory. If you want to save the output file, go to your PVC.
+cd
+cd </desired_directory>
+
+# Manually kick-off data collection
+nsys start
+
+# Manually stop data collection
+nsys stop
+Generating '/tmp/nsys-report.qdstrm'
+[1/1] [========================100%] report.nsys-rep
+Generated:
+    </desired_directory>/report.nsys-rep
+
+# Generate the results of the report
+nsys stats report.nsys-rep
+Generating SQLite file report2.sqlite from report.nsys-rep
+
+** CUDA API Summary (cuda_api_sum):
+
+ Time (%)  Total Time (ns)  Num Calls   Avg (ns)     Med (ns)    Min (ns)  Max (ns)   StdDev (ns)                 Name               
+ --------  ---------------  ---------  -----------  -----------  --------  ---------  -----------  ----------------------------------
+     ##.#      ###########      #####     ######.#      #####.#      ####   ########    #######.#  cudaKernel                
+
+```
+
+**Profile a Python script that uses CUDA**
+(Note: This example launches a Python script and starts profiling 60 seconds after the launch, tracing CUDA, cuDNN, cuBLAS, OS runtime APIs, and NVTX. Do not collect CPU sampling information or thread scheduling information. Profile any child processes. Generate the output file as <my_file>.nsys-rep in the current working directory.)
+```bash
+# Include the Nsight Systems launch command with in your script
+nsys profile --trace=cuda,cudnn,cublas,osrt,nvtx \
+--delay=60 --sample=none --cpuctxsw=none -o <my_file> \
+python train.py
+```
+
+**Run Application, Start / Stop Collection using cudaProfilerStart/Stop**
+(Note: Create interactive CLI process and set it up to begin collecting as soon as a cudaProfileStart() is detected. Launch application for default analysis, sending application output to the terminal. Stop collection at next call to cudaProfilerStop, when the user calls nsys stop, or when the root process terminates. Generate the report#.nsys-rep in the default location.)
+```bash
+# Include the Nsight Systems launch command with in your script
+nsys start -c cudaProfilerApi
+nsys launch -w true <application> [application-arguments]
+```
+
+To read more, go to the [Nsight Systems User Guide](https://docs.nvidia.com/nsight-systems/UserGuide/index.html).
+
 # To-Do List & Updates to torchtitan Repository 
 - Test with Llama 3 8B — Completed
 - Test with Llama 3 70B — Completed
@@ -386,3 +473,21 @@ The training scripts presented are slightly modified versions of the example scr
 * [torchtitan/utils.py](torchtitan/utils.py) - Updated seed to be within 32-bit range. The original seed was too large and triggered a runtime error in our environment (DGX Cloud on AWS).
 * [torchtitan/train_spec.py](torchtitan/train_spec.py) - Added loss_fn function
 * [train.py](train.py) - Changed the labels in train.py. Reshaped the predictions before calculating the loss.
+
+# Deprecated Section(s)
+
+## Export HuggingFace Token
+To read more about [HF access tokens, go here](https://huggingface.co/docs/hub/en/security-tokens). 
+
+```bash
+export HF_TOKEN=<YOUR_HF_TOKEN>
+echo $HF_TOKEN
+YOUR_HF_TOKEN
+```
+
+Your HuggingFace token will be referenced in the [run_llama_train.sh](run_llama_train.sh) script to download the Llama Tokenizer:
+
+```bash
+# Be sure to export your huggingface token via terminal e.g. export HF_TOKEN=<your HF Token> 
+python torchtitan/datasets/download_tokenizer.py --repo_id meta-llama/Meta-Llama-3.1-8B --tokenizer_path "original" --local_dir=/torchtitan/datasets/tokenizer/ --hf_token=$HF_TOKEN
+```

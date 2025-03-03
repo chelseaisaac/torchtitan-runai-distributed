@@ -320,12 +320,12 @@ def main(job_config: JobConfig):
                     del pred
                     loss.backward()
 
-            # optimizer step
+            # Optimizer Step
             checkpoint.maybe_wait_for_staging()
             optimizers.step()
             lr_schedulers.step()
 
-            # log metrics
+            # Log Metrics
             if (
                 train_state.step == 1
                 or train_state.step % job_config.metrics.log_freq == 0
