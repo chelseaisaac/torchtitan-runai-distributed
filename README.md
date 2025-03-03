@@ -131,7 +131,7 @@ If you are already familiar with Docker and have a private container registry, y
 
 ### Generate Personal Key
 For this example, we leverage Nvidia's Container Registry to push and pull our pre-built containers from. Alternatively, you can use docker.io via Docker Hub.
-1. First, generate your [personal API key](https://docs.nvidia.com/ngc/gpu-cloud/ngc-private-registry-user-guide/index.html#generating-personal-api-key) from your NGC account. Enter the following fields:
+1. First, generate your [personal API key](https://docs.nvidia.com/ngc/gpu-cloud/ngc-private-registry-user-guide/index.html#generating-personal-api-key) from your NGC account. Enter the following fields: <br>
         Key Name <br>
         Expiration <br>
         Services Included: <br> 
