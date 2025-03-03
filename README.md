@@ -140,7 +140,7 @@ For this example, we leverage Nvidia's Container Registry to push and pull our p
         Private Registry <br>
         Cloud Functions <br>
 
-Click **Generate Personal Key** and save it somewhere safe. You'll need it in the following step.
+Click **Generate Personal Key** and save it somewhere safe. You'll need it in the following step. <br><br>
 2. Log into nvcr.io using your terminal
 ```bash
 # Run the following docker command to start the login process to nvcr.io
@@ -179,7 +179,7 @@ sudo installer -pkg ngccli_mac_arm.pkg -target /usr/local
 ## Configure your NGC CLI config
 ngc config set
 
-## You'll be prompted 5 to enter the following details:
+## You'll be prompted to enter the following details:
 Enter API key [********]. Choices: [<VALID_APIKEY>, 'no-apikey']: <Enter Personal API Key>
 Enter CLI output format type [ascii]. Choices: ['ascii', 'csv', 'json']: <Enter CLI output format>
 Enter org [###########]. Choices: ['[###########']: <Enter Unique Org ID>
