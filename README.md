@@ -126,11 +126,21 @@ colima start
 ## Download the Llama Tokenizer
 We've included the tokenizer.model in this repository so you don't have to download it from HuggingFace. See the Deprecated Section at the end of the repo.  
 
-## NGC Container Registry Setup
+## Nvidia GPU Cloud (NGC) Setup
 If you are already familiar with Docker and have a private container registry, you may skip this section to **[Start a Multi-Node Training Run](#start-a-multi-node-training-run)** after you've pushed your pre-built container to your registry using the Dockerfile referenced above. 
 
+### Generate Personal Key
 For this example, we leverage Nvidia's Container Registry to push and pull our pre-built containers from. Alternatively, you can use docker.io via Docker Hub.
-1. First, generate your [personal API key](https://docs.nvidia.com/ngc/gpu-cloud/ngc-private-registry-user-guide/index.html#generating-personal-api-key) from your NGC account and save it somewhere safe. You'll need it in step 2.
+1. First, generate your [personal API key](https://docs.nvidia.com/ngc/gpu-cloud/ngc-private-registry-user-guide/index.html#generating-personal-api-key) from your NGC account. Enter the following fields:
+        Key Name <br>
+        Expiration <br>
+        Services Included: <br> 
+        Secrets Manager <br>
+        NGC Catalog <br>
+        Private Registry <br>
+        Cloud Functions <br>
+
+Click **Generate Personal Key** and save it somewhere safe. You'll need it in the following step.
 2. Log into nvcr.io using your terminal
 ```bash
 # Run the following docker command to start the login process to nvcr.io
@@ -148,6 +158,39 @@ Configure a credential helper to remove this warning. See
 https://docs.docker.com/engine/reference/commandline/login/#credential-stores
 
 Login Succeeded
+```
+### Install the NGC CLI
+The NGC CLI installation instructions can be found [here](https://org.ngc.nvidia.com/setup/installers/cli).
+
+```bash
+## Download the CLI package based on your operating system
+## For example, ARM64 MacOs
+curl -LO https://api.ngc.nvidia.com/v2/resources/nvidia/ngc-apps/ngc_cli/versions/3.60.2/files/ngccli_mac_arm.pkg
+
+## Check the installer's SHA256 hash to ensure the file wasn't corrupted during download
+shasum -a 256 ngccli_mac_arm.pkg
+
+## Verify the output of the SHA256 checksum
+c3733a4f8974a28b486a965be31e1ae7f1c7b6af68b10a2490766b5a17cca498
+
+## Run the installer
+sudo installer -pkg ngccli_mac_arm.pkg -target /usr/local
+
+## Configure your NGC CLI config
+ngc config set
+
+## You'll be prompted 5 to enter the following details:
+Enter API key [********]. Choices: [<VALID_APIKEY>, 'no-apikey']: <Enter Personal API Key>
+Enter CLI output format type [ascii]. Choices: ['ascii', 'csv', 'json']: <Enter CLI output format>
+Enter org [###########]. Choices: ['[###########']: <Enter Unique Org ID>
+Enter team [no-team]. Choices: ['no-team']: <enter no-team or team unless you have this configured>
+Enter ace [no-ace]. Choices: ['no-ace']: <enter no-ace unless you this configured>
+
+## Output results upon completing configuration
+Validating configuration...
+Successfully validated configuration.
+Saving configuration...
+Successfully saved NGC configuration to ~/username/.ngc/config
 ```
 
 # Using the Repository
