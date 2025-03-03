@@ -191,6 +191,9 @@ Validating configuration...
 Successfully validated configuration.
 Saving configuration...
 Successfully saved NGC configuration to ~/username/.ngc/config
+
+## Run the following command to verify your CLI is configured correctly
+ngc registry image list
 ```
 
 # Using the Repository
