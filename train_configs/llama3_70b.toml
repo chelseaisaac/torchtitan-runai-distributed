@@ -22,7 +22,7 @@ enable_wandb = false
 name = "llama3"
 flavor = "70B"
 norm_type = "rmsnorm"  # layernorm / np_layernorm / rmsnorm
-tokenizer_path = "./torchtitan/datasets/tokenizer/original/tokenizer.model"
+tokenizer_path = "/app/torchtitan/datasets/tokenizer/original/tokenizer.model"
 # converters = "float8"
 
 [optimizer]
