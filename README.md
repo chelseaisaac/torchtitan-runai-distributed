@@ -296,7 +296,13 @@ runai submit-dist pytorch --name distributed-training-pytorch --workers=1 -g 8 \
 
 You can also verify your PVC's claim name by running the following kubectl command:
 ```bash
-kubectl get pvc
+# List namespaces in your cluster
+kubectl get namespace
+NAME                                           STATUS   AGE
+runai-project-12345                                 Active   1d
+
+# List PVCs within your namespace
+kubectl get pvc -n <namespace>
 NAME                           STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
 alpha-pvc-project-12345        Bound     pvc-00000000-0000-0000-0000-000000000000   10Ti       RWX            zonal-rwx      <unset>                 23d
 beta-pvc-project-67890         Bound     pvc-00000000-0000-0000-0000-000000000000   10Ti       RWX            zonal-rwx      <unset>                 12d
